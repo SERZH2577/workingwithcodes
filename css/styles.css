@@ -3,46 +3,38 @@
 /* ===================== */
 
 body {
-  font-family: sans-serif;
-  line-height: 1.3;
-  color: #222;
-  background: #f7f7f7;
   margin: 0;
+  font-family: sans-serif;
+  background: #0f0f0f;
+  color: #fff;
 }
 
 .container {
-  max-width: 420px;
+  max-width: 480px;
   margin: auto;
-  padding: 16px;
+  padding: 12px;
+  padding-bottom: 90px;
 }
 
 /* ===================== */
-/* ТЕКСТ / ФОРМА */
+/* INPUT / TEXTAREA */
 /* ===================== */
-
-label {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
 
 input,
 textarea {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #c7c7c7;
-  border-radius: 10px;
-  outline: none;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #cfae09;
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 2px solid #333;
+  background: #1a1a1a;
+  color: #fff;
+  margin-bottom: 12px;
 }
 
 textarea {
+  min-height: 160px;
   resize: none;
-  min-height: 120px;
 }
 
 /* ===================== */
@@ -51,128 +43,123 @@ textarea {
 
 .btn {
   width: 100%;
-  height: 50px;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
+  height: 60px;
+  font-size: 18px;
+  border-radius: 14px;
   border: none;
-  border-radius: 12px;
-  background: #cfae09;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  background: #e1be0f;
-}
-
-.btn-clear {
-  background: #c7c7c7;
-  color: #222;
-}
-
-.btn-clear:hover {
-  background: #b5b5b5;
-}
-
-/* кнопки в ряд */
-.list__btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  list-style: none;
-  padding: 0;
-}
-
-/* ===================== */
-/* КНОПКА КОПИРОВАНИЯ */
-/* ===================== */
-
-.btn-copy {
-  width: 46px;
-  height: 46px;
-  padding: 0;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-copy svg {
-  width: 26px;
-  height: 26px;
-  fill: #cfae09;
-  transition: 0.2s;
-}
-
-.btn-copy:hover svg {
-  fill: #e1be0f;
+  background: #00ff88;
+  color: #000;
+  font-weight: bold;
 }
 
 /* ===================== */
 /* СКАНЕР */
 /* ===================== */
 
-.scanner-container {
-  margin-bottom: 16px;
-}
-
-/* кнопка сканера сверху */
-#scanner-btn {
-  width: 100%;
-  height: 50px;
-  margin-bottom: 10px;
-}
-
-/* основной блок камеры */
 #qr-reader {
   position: relative;
   width: 100%;
-  height: 260px;
-  border-radius: 14px;
+  height: 280px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 2px solid #cfae09;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   background: #000;
 }
 
-/* видео */
 #qr-reader video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
 }
 
 /* overlay */
 .scanner-overlay {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  z-index: 2;
 }
 
-/* успех */
 .scanner-overlay.success {
-  background: rgba(0, 255, 0, 0.25);
+  background: rgba(0, 255, 0, 0.3);
   opacity: 1;
 }
 
-/* ошибка */
 .scanner-overlay.error {
-  background: rgba(255, 0, 0, 0.25);
+  background: rgba(255, 0, 0, 0.3);
   opacity: 1;
+}
+
+/* рамка */
+.scan-box {
+  position: absolute;
+  width: 80%;
+  height: 40%;
+  top: 30%;
+  left: 10%;
+
+  border: 2px solid #00ff88;
+  border-radius: 12px;
+
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+/* линия */
+.scan-box::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #00ff88;
+  animation: scanLine 2s linear infinite;
+}
+
+@keyframes scanLine {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* ===================== */
+/* FULLSCREEN СКАНЕР */
+/* ===================== */
+
+body.scanner-active #qr-reader {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  z-index: 999;
+}
+
+body.scanner-active textarea,
+body.scanner-active input,
+body.scanner-active .bottom-bar,
+body.scanner-active .btn {
+  display: none;
+}
+
+/* ===================== */
+/* STOP КНОПКА */
+/* ===================== */
+
+.stop-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
 }
 
 /* ===================== */
@@ -180,17 +167,42 @@ textarea {
 /* ===================== */
 
 .statistic {
-  margin-top: 16px;
-}
-
-.statistic__text {
-  font-size: 16px;
+  margin-top: 10px;
 }
 
 .statistic__text-data {
   font-size: 22px;
+  color: #00ff88;
   font-weight: bold;
-  color: #cfae09;
+}
+
+/* ===================== */
+/* НИЖНЯЯ ПАНЕЛЬ */
+/* ===================== */
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+
+  background: #111;
+  border-top: 1px solid #222;
+}
+
+.bottom-btn {
+  flex: 1;
+  height: 50px;
+  border-radius: 12px;
+  border: none;
+
+  background: #1f1f1f;
+  color: #fff;
+  font-size: 14px;
 }
 
 /* ===================== */
@@ -201,7 +213,8 @@ textarea {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+
   justify-content: center;
   align-items: center;
 }
@@ -211,100 +224,25 @@ textarea {
 }
 
 .modal-content {
-  background: #fff;
+  background: #1a1a1a;
   padding: 20px;
   border-radius: 12px;
-  width: 280px;
   text-align: center;
 }
 
-.modal-text {
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
 .confirm {
-  padding: 10px 16px;
+  margin: 5px;
+  padding: 10px;
   border-radius: 8px;
   border: none;
-  color: #fff;
-  cursor: pointer;
 }
 
 .ok {
-  background: #f33c3c;
+  background: #ff4444;
+  color: #fff;
 }
 
 .cancel {
-  background: #16bc3a;
-}
-
-/* ===================== */
-/* УДАЛЕНИЕ ДУБЛЕЙ */
-/* ===================== */
-
-.delete-btn {
-  margin-top: 10px;
-  background: #f33c3c;
-}
-
-.delete-btn:hover {
-  background: #e25353;
-}
-
-/* ===================== */
-/* РАМКА СКАНЕРА */
-/* ===================== */
-
-.scan-box {
-  position: absolute;
-  width: 70%;
-  height: 50%;
-  top: 25%;
-  left: 15%;
-
-  border: 2px solid #00ff88;
-  border-radius: 10px;
-
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
-
-  z-index: 10; /* 🔥 ВАЖНО — выше видео */
-  pointer-events: none;
-
-  transform: translateZ(0); /* 🔥 фикс */
-}
-
-/* углы как в приложениях */
-.scan-box::before,
-.scan-box::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 3px solid #00ff88;
-}
-
-.scan-box::before {
-  top: -2px;
-  left: -2px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.scan-box::after {
-  bottom: -2px;
-  right: -2px;
-  border-left: none;
-  border-top: none;
-}
-
-#qr-reader video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-
-  transform: translateZ(0); /* 🔥 фикс для мобилок */
+  background: #00ff88;
+  color: #000;
 }

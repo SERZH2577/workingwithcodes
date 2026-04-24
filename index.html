@@ -2,79 +2,53 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Подсчёт и проверка кодов</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Сканер кодов</title>
+
     <link rel="stylesheet" href="./css/styles.css" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="favicon.png" type="image/png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <meta name="theme-color" content="#cfae09" />
 
-    <!-- Подключаем библиотеку сканера -->
-    <!-- <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script> -->
-    <!-- <script src="./js/index.js"></script> -->
+    <meta name="theme-color" content="#0f0f0f" />
   </head>
+
   <body>
-    <section class="section">
-      <div class="container">
-        <div class="scanner-container">
-          <button id="scanner-btn" class="btn">SCANNER</button>
-          <div id="qr-reader"></div>
-        </div>
+    <div class="container">
+      <!-- СКАНЕР -->
+      <div class="scanner-container">
+        <button id="scanner-btn" class="btn main-scan-btn">СКАНИРОВАТЬ</button>
 
-        <form class="form js-form" id="myForm">
-          <label>
-            <input type="text" id="nameInput" placeholder="Имя" />
-          </label>
-
-          <label>
-            <textarea
-              name="massage"
-              rows="8"
-              placeholder="Введите коды"
-              id="myTextarea"
-            ></textarea>
-          </label>
-
-          <ul class="list__btn">
-            <li class="list__btn-item">
-              <button class="btn btn-handle" type="button" id="checkBtn">
-                Проверить
-              </button>
-            </li>
-            <li class="list__btn-item">
-              <button class="btn btn-clear" type="button" id="clearBtn">
-                Очистить
-              </button>
-            </li>
-            <li class="list__btn-item">
-              <button
-                class="btn btn-copy"
-                type="button"
-                id="copyBtn"
-                aria-label="Скопировать"
-              >
-                <svg class="btn-copy--icon">
-                  <use href="./img/sprite.svg#icon-copy"></use>
-                </svg>
-              </button>
-            </li>
-          </ul>
-        </form>
-
-        <div class="statistic">
-          <p class="statistic__text js-statistic__text"></p>
-        </div>
+        <div id="qr-reader"></div>
       </div>
-    </section>
 
-    <!-- Модалки -->
+      <!-- ФОРМА -->
+      <form class="form">
+        <input type="text" id="nameInput" placeholder="Имя" />
+
+        <textarea
+          id="myTextarea"
+          placeholder="Сканируйте или вставьте коды"
+        ></textarea>
+      </form>
+
+      <!-- СТАТИСТИКА -->
+      <div class="statistic">
+        <p class="statistic__text js-statistic__text"></p>
+      </div>
+    </div>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+    <div class="bottom-bar">
+      <button class="bottom-btn" id="checkBtn">Проверить</button>
+      <button class="bottom-btn" id="clearBtn">Очистить</button>
+      <button class="bottom-btn" id="copyBtn">Копировать</button>
+    </div>
+
+    <!-- МОДАЛКИ -->
     <div id="clearModal" class="modal">
       <div class="modal-content">
-        <p class="modal-text">
-          Вы уверены, что хотите очистить содержимое окна?
-        </p>
+        <p>Очистить всё?</p>
         <button class="ok confirm" id="confirmBtn">Да</button>
         <button class="cancel confirm" id="cancelBtn">Отмена</button>
       </div>
@@ -82,17 +56,15 @@
 
     <div id="copyModal" class="modal">
       <div class="modal-content">
-        <p class="modal-text">Текст скопирован!</p>
+        <p>Скопировано</p>
         <button class="cancel confirm" id="okBtn">ОК</button>
       </div>
     </div>
 
+    <!-- ZXING -->
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
 
-    <script>
-      console.log("ZXing:", window.ZXing);
-    </script>
-
+    <!-- ТВОЙ JS -->
     <script src="./js/index.js"></script>
   </body>
 </html>
