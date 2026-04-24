@@ -116,7 +116,7 @@ textarea {
 }
 
 /* ===================== */
-/* РАМКА СКАНЕРА */
+/* SCAN WINDOW (CUTOUT) */
 /* ===================== */
 
 .scan-box {
@@ -130,49 +130,44 @@ textarea {
 
   z-index: 10;
   pointer-events: none;
+
+  --corner-size: 22px;
+  --corner-radius: 7px;
 }
 
-/* ===================== */
-/* ЗАТЕМНЕНИЕ ВОКРУГ ОКНА */
-/* ===================== */
-
+/* затемнение ВОКРУГ окна (правильный cutout) */
 .scan-box::before {
   content: "";
-  position: absolute;
-  inset: -9999px;
+  position: fixed;
+  inset: 0;
 
   background: rgba(0, 0, 0, 0.55);
-}
 
-/* “вырезаем” центр (эффект окна) */
-.scan-box::after {
-  content: "";
-  position: absolute;
+  /* ВЫРЕЗ ЦЕНТРАЛЬНОГО ОКНА */
+  -webkit-mask: radial-gradient(
+    farthest-side at center,
+    transparent 0%,
+    transparent 22%,
+    black 23%
+  );
 
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  border-radius: 14px;
-
-  box-shadow: inset 0 0 0 9999px transparent;
+  mask: radial-gradient(
+    farthest-side at center,
+    transparent 0%,
+    transparent 22%,
+    black 23%
+  );
 }
 
 /* ===================== */
 /* УГОЛКИ (4 ШТУКИ) */
 /* ===================== */
 
-.scan-box {
-  --corner-size: 22px;
-  --corner-radius: 7px;
-}
-
-/* общий стиль уголков */
 .scan-box i {
   position: absolute;
   width: var(--corner-size);
   height: var(--corner-size);
+
   border: 3px solid #fff;
   opacity: 0.95;
 }
@@ -181,8 +176,10 @@ textarea {
 .scan-box .tl {
   top: 0;
   left: 0;
+
   border-right: none;
   border-bottom: none;
+
   border-radius: var(--corner-radius) 0 0 0;
 }
 
@@ -190,8 +187,10 @@ textarea {
 .scan-box .tr {
   top: 0;
   right: 0;
+
   border-left: none;
   border-bottom: none;
+
   border-radius: 0 var(--corner-radius) 0 0;
 }
 
@@ -199,8 +198,10 @@ textarea {
 .scan-box .bl {
   bottom: 0;
   left: 0;
+
   border-right: none;
   border-top: none;
+
   border-radius: 0 0 0 var(--corner-radius);
 }
 
@@ -208,31 +209,11 @@ textarea {
 .scan-box .br {
   bottom: 0;
   right: 0;
+
   border-left: none;
   border-top: none;
+
   border-radius: 0 0 var(--corner-radius) 0;
-}
-
-/* линия сканирования */
-/* .scan-box::after {
-  content: "";
-  position: absolute;
-
-  width: 100%;
-  height: 2px;
-
-  background: #00ff88;
-
-  animation: scanLine 2s linear infinite;
-} */
-
-@keyframes scanLine {
-  0% {
-    top: 0;
-  }
-  100% {
-    top: 100%;
-  }
 }
 
 /* ===================== */
