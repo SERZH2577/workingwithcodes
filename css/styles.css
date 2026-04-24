@@ -17,7 +17,9 @@ body {
   width: 100%;
   max-width: 480px;
   margin: auto;
+
   padding: 12px;
+  padding-bottom: 120px;
 }
 
 /* ===================== */
@@ -150,7 +152,7 @@ body.scanner-active #qr-reader {
 body.scanner-active textarea,
 body.scanner-active input,
 body.scanner-active .bottom-bar,
-body.scanner-active .btn {
+body.scanner-active #scanner-btn {
   display: none;
 }
 
@@ -159,16 +161,20 @@ body.scanner-active .btn {
 /* ===================== */
 
 .stop-btn {
-  position: absolute;
+  position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1000;
 
-  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+
+  background: rgba(0, 0, 0, 0.7);
   color: #fff;
+
   border: none;
-  padding: 10px 14px;
-  border-radius: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+
+  font-size: 16px;
 }
 
 /* ===================== */
@@ -197,7 +203,9 @@ body.scanner-active .btn {
 
   display: flex;
   gap: 8px;
+
   padding: 10px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
 
   background: #111;
   border-top: 1px solid #222;
