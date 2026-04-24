@@ -2,6 +2,10 @@
 /* БАЗА */
 /* ===================== */
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: sans-serif;
@@ -10,10 +14,10 @@ body {
 }
 
 .container {
+  width: 100%;
   max-width: 480px;
   margin: auto;
   padding: 12px;
-  padding-bottom: 90px;
 }
 
 /* ===================== */
@@ -23,17 +27,22 @@ body {
 input,
 textarea {
   width: 100%;
+  max-width: 100%;
+
   padding: 12px;
   font-size: 18px;
+
   border-radius: 12px;
   border: 2px solid #333;
+
   background: #1a1a1a;
   color: #fff;
+
   margin-bottom: 12px;
 }
 
 textarea {
-  min-height: 160px;
+  min-height: 20vh;
   resize: none;
 }
 
