@@ -196,6 +196,8 @@ function playBeep(type = "ok") {
 scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
+  document.body.classList.add("scanner-active");
+
   scannerBtn.style.display = "none";
 
   stopBtn = document.createElement("button");
@@ -293,6 +295,8 @@ async function startScanner() {
 }
 
 function stopScanner() {
+  document.body.classList.remove("scanner-active");
+
   if (codeReader) {
     codeReader.reset();
     codeReader = null;
