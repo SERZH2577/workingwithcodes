@@ -200,6 +200,23 @@ async function startScanner() {
   const scanBox = document.createElement("div");
   scanBox.className = "scan-box";
 
+  const tl = document.createElement("i");
+  tl.className = "tl";
+
+  const tr = document.createElement("i");
+  tr.className = "tr";
+
+  const bl = document.createElement("i");
+  bl.className = "bl";
+
+  const br = document.createElement("i");
+  br.className = "br";
+
+  scanBox.appendChild(tl);
+  scanBox.appendChild(tr);
+  scanBox.appendChild(bl);
+  scanBox.appendChild(br);
+
   qrReader.appendChild(video);
   qrReader.appendChild(overlay);
   qrReader.appendChild(scanBox);
