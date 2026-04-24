@@ -197,6 +197,7 @@ scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
   document.body.classList.add("scanner-active");
+  document.addEventListener("dblclick", stopScanner);
 
   scannerBtn.style.display = "none";
 
@@ -205,7 +206,7 @@ async function startScanner() {
   stopBtn.className = "btn";
   stopBtn.style.height = "50px";
   stopBtn.style.marginBottom = "10px";
-  scannerBtn.parentNode.insertBefore(stopBtn, qrReader);
+  document.body.appendChild(stopBtn);
 
   qrReader.innerHTML = ""; // очистка контейнера
 
@@ -296,6 +297,7 @@ async function startScanner() {
 
 function stopScanner() {
   document.body.classList.remove("scanner-active");
+  document.removeEventListener("dblclick", stopScanner);
 
   if (codeReader) {
     codeReader.reset();
