@@ -16,23 +16,22 @@ const checkBtn = document.getElementById("checkBtn");
 const scannerBtn = document.getElementById("scanner-btn");
 const qrReader = document.getElementById("qr-reader");
 
-let codeReader;
+let codeReader = null;
 let currentStream = null;
 let scannedCodes = new Set();
-let stopBtn;
+let stopBtn = null;
+let isScanning = false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 /* ===================== */
-/* AUDIO FIX */
+/* AUDIO */
 /* ===================== */
 
 document.body.addEventListener(
   "click",
   () => {
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
   },
   { once: true }
 );
@@ -41,9 +40,7 @@ document.body.addEventListener(
 /* CLEAR */
 /* ===================== */
 
-clearBtn.addEventListener("click", () => {
-  clearModal.classList.add("show");
-});
+clearBtn.addEventListener("click", () => clearModal.classList.add("show"));
 
 confirmBtn.addEventListener("click", () => {
   textareaRef.value = "";
@@ -51,7 +48,6 @@ confirmBtn.addEventListener("click", () => {
   statisticTextRef.innerHTML = "";
   scannedCodes.clear();
   clearModal.classList.remove("show");
-  textareaRef.focus();
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -70,9 +66,9 @@ copyBtn.addEventListener("click", () => {
 
   const combined = name ? name + "\n\n" + text : text;
 
-  navigator.clipboard
-    .writeText(combined)
-    .then(() => copyModal.classList.add("show"));
+  navigator.clipboard.writeText(combined).then(() => {
+    copyModal.classList.add("show");
+  });
 });
 
 okBtn.addEventListener("click", () => {
@@ -123,17 +119,35 @@ function checkDuplicates() {
 
     statisticTextRef.appendChild(repeatInfo);
     statisticTextRef.appendChild(deleteBtn);
-    return;
-  }
+  } else {
+    statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
 
-  statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
+    const shareBtn = document.createElement("button");
+    shareBtn.textContent = "Поделиться";
+    shareBtn.className = "btn";
+    shareBtn.style.marginTop = "10px";
+
+    shareBtn.onclick = () => {
+      const name = nameInputRef.value.trim();
+      const text = textareaRef.value.trim();
+      const combined = name ? name + "\n\n" + text : text;
+
+      if (navigator.share) {
+        navigator.share({ text: combined });
+      } else {
+        navigator.clipboard.writeText(combined);
+      }
+    };
+
+    statisticTextRef.appendChild(shareBtn);
+  }
 }
 
 /* ===================== */
 /* SOUND */
 /* ===================== */
 
-function playBeep(type = "ok") {
+function playBeep(type) {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
 
@@ -143,7 +157,7 @@ function playBeep(type = "ok") {
   if (type === "scan") {
     osc.frequency.value = 1500;
     osc.type = "square";
-  } else if (type === "error") {
+  } else {
     osc.frequency.value = 300;
     osc.type = "sawtooth";
   }
@@ -161,6 +175,9 @@ function playBeep(type = "ok") {
 scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
+  if (isScanning) return;
+  isScanning = true;
+
   scannerBtn.style.display = "none";
 
   qrReader.style.display = "block";
@@ -208,13 +225,14 @@ async function startScanner() {
 
       if (!scannedCodes.has(text)) {
         scannedCodes.add(text);
+
         textareaRef.value += (textareaRef.value ? "\n" : "") + text;
 
         playBeep("scan");
-        flashOverlay("success");
+        flashOverlay(overlay, "success");
       } else {
         playBeep("error");
-        flashOverlay("error");
+        flashOverlay(overlay, "error");
       }
     });
   } catch (e) {
@@ -228,6 +246,8 @@ async function startScanner() {
 /* ===================== */
 
 function stopScanner() {
+  isScanning = false;
+
   if (codeReader) {
     codeReader.reset();
     codeReader = null;
@@ -250,12 +270,10 @@ function stopScanner() {
 /* FLASH */
 /* ===================== */
 
-function flashOverlay(type) {
-  const overlay = document.querySelector(".scanner-overlay");
+function flashOverlay(overlay, type) {
   if (!overlay) return;
 
   overlay.classList.remove("success", "error");
-
   overlay.classList.add(type);
 
   setTimeout(() => {
