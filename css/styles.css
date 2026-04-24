@@ -163,57 +163,85 @@ textarea {
 /* УГОЛКИ (4 ШТУКИ) */
 /* ===================== */
 
+.scan-box {
+  position: absolute;
+
+  width: 78%;
+  height: 42%;
+
+  top: 29%;
+  left: 11%;
+
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ===================== */
+/* ЗАТЕМНЕНИЕ ВОКРУГ (4 ПАНЕЛИ) */
+/* ===================== */
+
+.scan-box::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  /* создаём 4 затемнённых слоя */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) top,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) bottom,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) left,
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) right;
+
+  background-size: 100% 29%, 100% 29%, 11% 42%, 11% 42%;
+
+  background-repeat: no-repeat;
+}
+
+/* ===================== */
+/* УГОЛКИ */
+/* ===================== */
+
 .scan-box i {
   position: absolute;
-  width: var(--corner-size);
-  height: var(--corner-size);
+  width: 24px;
+  height: 24px;
 
   border: 3px solid #fff;
-  opacity: 0.95;
 }
 
 /* верхний левый */
-.scan-box .tl {
+.tl {
   top: 0;
   left: 0;
-
   border-right: none;
   border-bottom: none;
-
-  border-radius: var(--corner-radius) 0 0 0;
+  border-radius: 7px 0 0 0;
 }
 
 /* верхний правый */
-.scan-box .tr {
+.tr {
   top: 0;
   right: 0;
-
   border-left: none;
   border-bottom: none;
-
-  border-radius: 0 var(--corner-radius) 0 0;
+  border-radius: 0 7px 0 0;
 }
 
 /* нижний левый */
-.scan-box .bl {
+.bl {
   bottom: 0;
   left: 0;
-
   border-right: none;
   border-top: none;
-
-  border-radius: 0 0 0 var(--corner-radius);
+  border-radius: 0 0 0 7px;
 }
 
 /* нижний правый */
-.scan-box .br {
+.br {
   bottom: 0;
   right: 0;
-
   border-left: none;
   border-top: none;
-
-  border-radius: 0 0 var(--corner-radius) 0;
+  border-radius: 0 0 7px 0;
 }
 
 /* ===================== */
