@@ -95,153 +95,40 @@ textarea {
 }
 
 /* ===================== */
-/* OVERLAY */
-/* ===================== */
-
-.scanner-overlay {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  z-index: 2;
-}
-
-.scanner-overlay.success {
-  background: rgba(0, 255, 0, 0.25);
-  opacity: 1;
-}
-
-.scanner-overlay.error {
-  background: rgba(255, 0, 0, 0.25);
-  opacity: 1;
-}
-
-/* ===================== */
-/* SCAN WINDOW (CUTOUT) */
+/* OVERLAY (ПО ВСЕМУ ЭКРАНУ) */
 /* ===================== */
 
 .scan-box {
   position: absolute;
-
-  width: 78%;
-  height: 42%;
-
-  top: 29%;
-  left: 11%;
-
+  inset: 0;
   z-index: 10;
   pointer-events: none;
-
-  --corner-size: 22px;
-  --corner-radius: 7px;
 }
 
-/* затемнение ВОКРУГ окна (правильный cutout) */
+/* затемнение ВСЕГО экрана */
 .scan-box::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
 
   background: rgba(0, 0, 0, 0.55);
-
-  /* ВЫРЕЗ ЦЕНТРАЛЬНОГО ОКНА */
-  -webkit-mask: radial-gradient(
-    farthest-side at center,
-    transparent 0%,
-    transparent 22%,
-    black 23%
-  );
-
-  mask: radial-gradient(
-    farthest-side at center,
-    transparent 0%,
-    transparent 22%,
-    black 23%
-  );
 }
 
-/* ===================== */
-/* УГОЛКИ (4 ШТУКИ) */
-/* ===================== */
-
-.scan-box {
+/* ВЫРЕЗ ЦЕНТРА (ПРОЗРАЧНОЕ ОКНО) */
+.scan-box::after {
+  content: "";
   position: absolute;
-
-  width: 78%;
-  height: 42%;
 
   top: 29%;
   left: 11%;
 
-  z-index: 10;
-  pointer-events: none;
-}
+  width: 78%;
+  height: 42%;
 
-/* ===================== */
-/* ЗАТЕМНЕНИЕ ВОКРУГ (4 ПАНЕЛИ) */
-/* ===================== */
+  border-radius: 10px;
 
-.scan-box::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-
-  /* создаём 4 затемнённых слоя */
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) top,
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) bottom,
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) left,
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)) right;
-
-  background-size: 100% 29%, 100% 29%, 11% 42%, 11% 42%;
-
-  background-repeat: no-repeat;
-}
-
-/* ===================== */
-/* УГОЛКИ */
-/* ===================== */
-
-.scan-box i {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-
-  border: 3px solid #fff;
-}
-
-/* верхний левый */
-.tl {
-  top: 0;
-  left: 0;
-  border-right: none;
-  border-bottom: none;
-  border-radius: 7px 0 0 0;
-}
-
-/* верхний правый */
-.tr {
-  top: 0;
-  right: 0;
-  border-left: none;
-  border-bottom: none;
-  border-radius: 0 7px 0 0;
-}
-
-/* нижний левый */
-.bl {
-  bottom: 0;
-  left: 0;
-  border-right: none;
-  border-top: none;
-  border-radius: 0 0 0 7px;
-}
-
-/* нижний правый */
-.br {
-  bottom: 0;
-  right: 0;
-  border-left: none;
-  border-top: none;
-  border-radius: 0 0 7px 0;
+  background: transparent;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
 }
 
 /* ===================== */
