@@ -1,7 +1,3 @@
-/* ===================== */
-/* БАЗА */
-/* ===================== */
-
 * {
   box-sizing: border-box;
 }
@@ -12,6 +8,10 @@ body {
   background: #0f0f0f;
   color: #fff;
 }
+
+/* ===================== */
+/* КОНТЕЙНЕР */
+/* ===================== */
 
 .container {
   width: 100%;
@@ -29,7 +29,6 @@ body {
 input,
 textarea {
   width: 100%;
-  max-width: 100%;
 
   padding: 12px;
   font-size: 18px;
@@ -44,7 +43,7 @@ textarea {
 }
 
 textarea {
-  min-height: 20vh;
+  min-height: 140px;
   resize: none;
 }
 
@@ -55,9 +54,11 @@ textarea {
 .btn {
   width: 100%;
   height: 60px;
+
   font-size: 18px;
   border-radius: 14px;
   border: none;
+
   background: #00ff88;
   color: #000;
   font-weight: bold;
@@ -67,24 +68,36 @@ textarea {
 /* СКАНЕР */
 /* ===================== */
 
+.hidden {
+  display: none;
+}
+
 #qr-reader {
-  position: relative;
-  width: 100%;
-  height: 280px;
-  border-radius: 16px;
-  overflow: hidden;
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
   background: #000;
+  z-index: 999;
+
+  display: none;
 }
 
 #qr-reader video {
   position: absolute;
   inset: 0;
+
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* overlay */
+/* ===================== */
+/* OVERLAY */
+/* ===================== */
+
 .scanner-overlay {
   position: absolute;
   inset: 0;
@@ -93,37 +106,44 @@ textarea {
 }
 
 .scanner-overlay.success {
-  background: rgba(0, 255, 0, 0.3);
+  background: rgba(0, 255, 0, 0.25);
   opacity: 1;
 }
 
 .scanner-overlay.error {
-  background: rgba(255, 0, 0, 0.3);
+  background: rgba(255, 0, 0, 0.25);
   opacity: 1;
 }
 
-/* рамка */
+/* ===================== */
+/* РАМКА СКАНЕРА */
+/* ===================== */
+
 .scan-box {
   position: absolute;
+
   width: 80%;
   height: 40%;
+
   top: 30%;
   left: 10%;
 
   border: 2px solid #00ff88;
   border-radius: 12px;
 
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
   z-index: 10;
 }
 
-/* линия */
+/* линия сканирования */
 .scan-box::after {
   content: "";
   position: absolute;
+
   width: 100%;
   height: 2px;
+
   background: #00ff88;
+
   animation: scanLine 2s linear infinite;
 }
 
@@ -134,26 +154,6 @@ textarea {
   100% {
     top: 100%;
   }
-}
-
-/* ===================== */
-/* FULLSCREEN СКАНЕР */
-/* ===================== */
-
-body.scanner-active #qr-reader {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  border-radius: 0;
-  z-index: 999;
-}
-
-body.scanner-active textarea,
-body.scanner-active input,
-body.scanner-active .bottom-bar,
-body.scanner-active #scanner-btn {
-  display: none;
 }
 
 /* ===================== */
@@ -214,6 +214,7 @@ body.scanner-active #scanner-btn {
 .bottom-btn {
   flex: 1;
   height: 50px;
+
   border-radius: 12px;
   border: none;
 
@@ -230,6 +231,7 @@ body.scanner-active #scanner-btn {
   display: none;
   position: fixed;
   inset: 0;
+
   background: rgba(0, 0, 0, 0.6);
 
   justify-content: center;

@@ -15,24 +15,19 @@
 
   <body>
     <div class="container">
-      <!-- СКАНЕР -->
-      <div class="scanner-container">
-        <button id="scanner-btn" class="btn main-scan-btn">СКАНИРОВАТЬ</button>
+      <input type="text" id="nameInput" placeholder="Имя" />
 
-        <div id="qr-reader"></div>
-      </div>
+      <textarea
+        id="myTextarea"
+        placeholder="Сканируйте или вставьте коды"
+      ></textarea>
 
-      <!-- ФОРМА -->
-      <form class="form">
-        <input type="text" id="nameInput" placeholder="Имя" />
+      <!-- кнопка сканера -->
+      <button id="scanner-btn" class="btn main-scan-btn">СКАНИРОВАТЬ</button>
 
-        <textarea
-          id="myTextarea"
-          placeholder="Сканируйте или вставьте коды"
-        ></textarea>
-      </form>
+      <!-- сканер (скрыт) -->
+      <div id="qr-reader" class="hidden"></div>
 
-      <!-- СТАТИСТИКА -->
       <div class="statistic">
         <p class="statistic__text js-statistic__text"></p>
       </div>

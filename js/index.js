@@ -20,9 +20,13 @@ let codeReader;
 let currentStream = null;
 let scannedCodes = new Set();
 let stopBtn;
+
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// --- Аудио ---
+/* ===================== */
+/* AUDIO FIX */
+/* ===================== */
+
 document.body.addEventListener(
   "click",
   () => {
@@ -33,40 +37,52 @@ document.body.addEventListener(
   { once: true }
 );
 
-// --- Очистка ---
-document.body.addEventListener(
-  "click",
-  () => {
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
-  },
-  { once: true }
-);
-clearBtn.addEventListener("click", () => clearModal.classList.add("show"));
+/* ===================== */
+/* CLEAR */
+/* ===================== */
+
+clearBtn.addEventListener("click", () => {
+  clearModal.classList.add("show");
+});
+
 confirmBtn.addEventListener("click", () => {
   textareaRef.value = "";
   nameInputRef.value = "";
   statisticTextRef.innerHTML = "";
-  clearModal.classList.remove("show");
   scannedCodes.clear();
+  clearModal.classList.remove("show");
   textareaRef.focus();
 });
-cancelBtn.addEventListener("click", () => clearModal.classList.remove("show"));
 
-// --- Копирование ---
+cancelBtn.addEventListener("click", () => {
+  clearModal.classList.remove("show");
+});
+
+/* ===================== */
+/* COPY */
+/* ===================== */
+
 copyBtn.addEventListener("click", () => {
   const name = nameInputRef.value.trim();
   const text = textareaRef.value.trim();
+
   if (!name && !text) return;
+
   const combined = name ? name + "\n\n" + text : text;
+
   navigator.clipboard
     .writeText(combined)
     .then(() => copyModal.classList.add("show"));
 });
-okBtn.addEventListener("click", () => copyModal.classList.remove("show"));
 
-// --- Проверка дублирования ---
+okBtn.addEventListener("click", () => {
+  copyModal.classList.remove("show");
+});
+
+/* ===================== */
+/* DUPLICATES */
+/* ===================== */
+
 checkBtn.addEventListener("click", checkDuplicates);
 
 function checkDuplicates() {
@@ -76,7 +92,7 @@ function checkDuplicates() {
     .split(/\s+/)
     .filter(Boolean);
 
-  if (values.length === 0) {
+  if (!values.length) {
     statisticTextRef.innerHTML = "";
     return;
   }
@@ -84,138 +100,82 @@ function checkDuplicates() {
   const seen = {};
   const duplicates = [];
 
-  values.forEach((v, i) => {
-    seen[v] ? duplicates.push({ num: v, index: i }) : (seen[v] = true);
+  values.forEach((v) => {
+    if (seen[v]) duplicates.push(v);
+    else seen[v] = true;
   });
 
   statisticTextRef.innerHTML = "";
 
-  if (duplicates.length > 0) {
-    highlightFirstDuplicate(duplicates[0].num);
-
+  if (duplicates.length) {
     const repeatInfo = document.createElement("div");
-    repeatInfo.className = "repeat-info";
-    repeatInfo.innerHTML = `Повторов: <span class="statistic__text-data">${duplicates.length}</span>`;
+    repeatInfo.innerHTML = `Повторов: <b>${duplicates.length}</b>`;
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Удалить повторы";
-    deleteBtn.className = "btn delete-btn";
+    deleteBtn.className = "btn";
     deleteBtn.style.marginTop = "10px";
-    deleteBtn.addEventListener("click", () => deleteAllDuplicates(values));
+
+    deleteBtn.onclick = () => {
+      textareaRef.value = [...new Set(values)].join("\n");
+      checkDuplicates();
+    };
 
     statisticTextRef.appendChild(repeatInfo);
     statisticTextRef.appendChild(deleteBtn);
     return;
   }
 
-  const count = values.length;
-  let corob = "коробов";
-
-  if (count % 10 === 1 && count % 100 !== 11) corob = "короб";
-  else if (
-    [2, 3, 4].includes(count % 10) &&
-    ![12, 13, 14].includes(count % 100)
-  )
-    corob = "короба";
-
-  statisticTextRef.innerHTML = `Всего <span class="statistic__text-data">${count}</span> ${corob}.`;
-
-  let shareIcon = document.querySelector(".share-icon");
-
-  if (!shareIcon) {
-    shareIcon = document.createElement("img");
-    shareIcon.src = "img/share.svg";
-    shareIcon.className = "share-icon";
-    shareIcon.style.width = "48px";
-    shareIcon.style.marginTop = "10px";
-
-    shareIcon.addEventListener("click", () => {
-      const name = nameInputRef.value.trim();
-      const text = textareaRef.value.trim();
-      const combined = name ? name + "\n\n" + text : text;
-
-      if (navigator.share) {
-        navigator.share({ title: "Список коробов", text: combined });
-      } else {
-        navigator.clipboard.writeText(combined);
-        alert("Скопировано!");
-      }
-    });
-
-    statisticTextRef.appendChild(shareIcon);
-  }
+  statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
 }
 
-function highlightFirstDuplicate(val) {
-  const text = textareaRef.value;
-  const match = new RegExp(`\\b${val}\\b`).exec(text);
-  if (match) {
-    textareaRef.focus();
-    textareaRef.setSelectionRange(match.index, match.index + val.length);
-  }
-}
-
-function deleteAllDuplicates(values) {
-  textareaRef.value = [...new Set(values)].join("\n");
-  checkDuplicates();
-}
+/* ===================== */
+/* SOUND */
+/* ===================== */
 
 function playBeep(type = "ok") {
-  const oscillator = audioCtx.createOscillator();
-  const gainNode = audioCtx.createGain();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
 
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-
-  // 🔥 НАСТРОЙКА ЗВУКА
-  if (type === "ok") {
-    oscillator.frequency.value = 1000;
-    oscillator.type = "sine";
-  }
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
 
   if (type === "scan") {
-    oscillator.frequency.value = 1800;
-    oscillator.type = "square";
+    osc.frequency.value = 1500;
+    osc.type = "square";
+  } else if (type === "error") {
+    osc.frequency.value = 300;
+    osc.type = "sawtooth";
   }
 
-  if (type === "error") {
-    oscillator.frequency.value = 300;
-    oscillator.type = "sawtooth";
-  }
+  gain.gain.value = 0.1;
 
-  gainNode.gain.value = 0.1;
-
-  oscillator.start();
-  oscillator.stop(audioCtx.currentTime + 0.12);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.1);
 }
 
-// =====================
-// ✅ ZXING СКАНЕР
-// =====================
+/* ===================== */
+/* SCANNER */
+/* ===================== */
 
 scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
-  document.body.classList.add("scanner-active");
-  document.addEventListener("dblclick", stopScanner);
-
   scannerBtn.style.display = "none";
 
+  qrReader.style.display = "block";
+  qrReader.innerHTML = "";
+
   stopBtn = document.createElement("button");
-  stopBtn.textContent = "STOP SCAN";
-  stopBtn.className = "btn";
-  stopBtn.style.height = "50px";
-  stopBtn.style.marginBottom = "10px";
+  stopBtn.textContent = "STOP";
+  stopBtn.className = "stop-btn";
   document.body.appendChild(stopBtn);
 
-  qrReader.innerHTML = ""; // очистка контейнера
+  stopBtn.addEventListener("click", stopScanner);
 
-  // создаем видео элемент
   const video = document.createElement("video");
-  video.setAttribute("autoplay", true);
-  video.setAttribute("playsinline", true);
-  video.style.width = "100%";
-  video.style.height = "100%";
+  video.autoplay = true;
+  video.playsInline = true;
 
   const overlay = document.createElement("div");
   overlay.className = "scanner-overlay";
@@ -230,103 +190,73 @@ async function startScanner() {
   try {
     currentStream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: { ideal: "environment" },
-
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-
-        focusMode: "continuous", // 🔥 автофокус
+        facingMode: "environment",
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
       },
     });
 
     video.srcObject = currentStream;
     await video.play();
 
-    const track = currentStream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
+    codeReader = new ZXing.BrowserMultiFormatReader();
 
-    const constraints = {};
+    codeReader.decodeFromVideoDevice(null, video, (result) => {
+      if (!result) return;
 
-    // 🔍 ЗУМ
-    if (capabilities.zoom) {
-      constraints.zoom = capabilities.zoom.max > 2 ? 2 : capabilities.zoom.max;
-    }
+      const text = result.getText();
 
-    // 🔦 ФОНАРИК (если есть)
-    if (capabilities.torch) {
-      constraints.torch = true;
-    }
+      if (!scannedCodes.has(text)) {
+        scannedCodes.add(text);
+        textareaRef.value += (textareaRef.value ? "\n" : "") + text;
 
-    // 🎯 ФОКУС
-    if (capabilities.focusMode) {
-      constraints.focusMode = "continuous";
-    }
-
-    // ⚙️ применяем
-    if (Object.keys(constraints).length > 0) {
-      track.applyConstraints({ advanced: [constraints] });
-    }
-
-    codeReader = new ZXing.BrowserMultiFormatReader(undefined, {
-      delayBetweenScanAttempts: 80,
-    });
-
-    codeReader.decodeFromVideoDevice(null, video, (result, err) => {
-      if (result) {
-        const text = result.getText();
-
-        if (!scannedCodes.has(text)) {
-          scannedCodes.add(text);
-          playBeep("scan"); // ✔ звук успешного сканирования
-          textareaRef.value += (textareaRef.value ? "\n" : "") + text;
-          flashOverlay("success");
-        } else {
-          playBeep("error"); // ✔ если дубликат
-          flashOverlay("error");
-        }
+        playBeep("scan");
+        flashOverlay("success");
+      } else {
+        playBeep("error");
+        flashOverlay("error");
       }
     });
   } catch (e) {
-    console.error(e);
     alert("Нет доступа к камере");
     stopScanner();
   }
-
-  stopBtn.addEventListener("click", stopScanner);
 }
 
-function stopScanner() {
-  document.body.classList.remove("scanner-active");
-  document.removeEventListener("dblclick", stopScanner);
+/* ===================== */
+/* STOP SCANNER */
+/* ===================== */
 
+function stopScanner() {
   if (codeReader) {
     codeReader.reset();
     codeReader = null;
   }
 
   if (currentStream) {
-    currentStream.getTracks().forEach((track) => track.stop());
+    currentStream.getTracks().forEach((t) => t.stop());
     currentStream = null;
   }
 
-  qrReader.innerHTML = ""; // убираем видео
+  qrReader.innerHTML = "";
+  qrReader.style.display = "none";
 
   if (stopBtn) stopBtn.remove();
+
   scannerBtn.style.display = "block";
 }
 
-// --- Вспышка ---
+/* ===================== */
+/* FLASH */
+/* ===================== */
+
 function flashOverlay(type) {
-  const overlay = qrReader.querySelector(".scanner-overlay");
+  const overlay = document.querySelector(".scanner-overlay");
   if (!overlay) return;
 
   overlay.classList.remove("success", "error");
 
-  if (type === "success") {
-    overlay.classList.add("success");
-  } else {
-    overlay.classList.add("error");
-  }
+  overlay.classList.add(type);
 
   setTimeout(() => {
     overlay.classList.remove("success", "error");
