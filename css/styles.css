@@ -129,7 +129,7 @@ textarea {
 
 .clean-btn {
   border: 2px solid hsla(0, 100%, 50%, 0.2);
-  background: hsla(0, 100%, 50%, 0.2);
+  /* background: hsla(0, 100%, 50%, 0.2); */
 }
 
 .check-btn {
