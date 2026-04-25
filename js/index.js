@@ -182,6 +182,14 @@ function checkDuplicates() {
 scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
+  try {
+    if (screen.orientation && screen.orientation.lock) {
+      await screen.orientation.lock("portrait");
+    }
+  } catch (e) {
+    console.log("Orientation lock not supported");
+  }
+
   if (isScanning) return;
   isScanning = true;
 
@@ -246,7 +254,24 @@ async function startScanner() {
     videoTrack = currentStream.getVideoTracks()[0];
 
     const track = currentStream.getVideoTracks()[0];
-    const caps = track.getCapabilities?.() || {};
+
+    try {
+      const caps = track.getCapabilities?.();
+
+      const constraints = {};
+
+      if (caps.focusMode) {
+        constraints.focusMode = "continuous";
+      }
+
+      if (caps.zoom) {
+        constraints.zoom = Math.min(2, caps.zoom.max);
+      }
+
+      if (Object.keys(constraints).length) {
+        track.applyConstraints({ advanced: [constraints] });
+      }
+    } catch (e) {}
 
     // 🔥 ВОССТАНОВЛЕНИЕ ФОКУСА / СТАБИЛЬНОСТИ
     try {
@@ -258,9 +283,8 @@ async function startScanner() {
       });
     } catch (e) {}
 
-    // 🔥 ВАЖНО: быстрый режим ZXing (как у тебя было)
     codeReader = new ZXing.BrowserMultiFormatReader(undefined, {
-      delayBetweenScanAttempts: 30, // КЛЮЧ К СКОРОСТИ
+      delayBetweenScanAttempts: 30,
     });
 
     codeReader.decodeFromVideoDevice(null, video, (result) => {
@@ -291,6 +315,12 @@ async function startScanner() {
 /* ===================== */
 
 function stopScanner() {
+  try {
+    if (screen.orientation && screen.orientation.unlock) {
+      screen.orientation.unlock();
+    }
+  } catch (e) {}
+
   isScanning = false;
 
   torchEnabled = false;
