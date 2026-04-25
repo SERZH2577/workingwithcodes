@@ -127,6 +127,18 @@ textarea {
   border-radius: 12px;
 }
 
+.clean-btn {
+  border: 1px solid hsla(0, 100%, 50%, 0.15);
+}
+
+.check-btn {
+  border: 1px solid hsla(200, 100%, 50%, 0.15);
+}
+
+.copy-btn {
+  border: 1px solid hsla(134, 100%, 50%, 0.1);
+}
+
 /* modal */
 .modal {
   display: none;
