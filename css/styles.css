@@ -133,7 +133,7 @@ textarea {
 
   background: #1f1f1f;
   color: #fff;
-  font-size: 16px;
+  font-size: 12px;
 }
 
 .clean-btn {
@@ -290,5 +290,5 @@ textarea {
   color: #000;
 
   font-size: 16px;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
