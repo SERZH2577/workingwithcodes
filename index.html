@@ -10,7 +10,19 @@
 
   <body>
     <div class="container">
-      <input id="nameInput" placeholder="Имя" />
+      <div class="name-row">
+        <input type="text" id="nameInput" placeholder="Имя" />
+
+        <div class="type-select">
+          <button id="typeBtn" class="type-btn">короба</button>
+
+          <div id="typeMenu" class="type-menu hidden">
+            <div data-value="короба">короба</div>
+            <div data-value="пары">пары</div>
+          </div>
+        </div>
+      </div>
+
       <textarea id="myTextarea" placeholder="Коды"></textarea>
 
       <button id="scanner-btn" class="btn">СКАНИРОВАТЬ</button>
@@ -31,16 +43,20 @@
     <!-- modals -->
     <div id="clearModal" class="modal">
       <div class="modal-content">
-        <p>Очистить?</p>
-        <button id="confirmBtn" class="ok confirm">Да</button>
-        <button id="cancelBtn" class="cancel confirm">Нет</button>
+        <p class="info-text">Подтвердите очистку!</p>
+        <div class="btn-container">
+          <button id="confirmBtn" class="ok confirm modal-btn">Очистить</button>
+          <button id="cancelBtn" class="cancel confirm modal-btn">
+            Отмена
+          </button>
+        </div>
       </div>
     </div>
 
     <div id="copyModal" class="modal">
       <div class="modal-content">
-        <p>Скопировано</p>
-        <button id="okBtn" class="cancel confirm">OK</button>
+        <p class="info-text">Скопировано</p>
+        <button id="okBtn" class="cancel confirm modal-btn">OK</button>
       </div>
     </div>
 

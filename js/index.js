@@ -16,6 +16,9 @@ const okBtn = document.getElementById("okBtn");
 const scannerBtn = document.getElementById("scanner-btn");
 const qrReader = document.getElementById("qr-reader");
 
+const typeBtn = document.getElementById("typeBtn");
+const typeMenu = document.getElementById("typeMenu");
+
 let codeReader;
 let currentStream = null;
 let scannedCodes = new Set();
@@ -23,6 +26,7 @@ let stopBtn = null;
 let isScanning = false;
 let torchEnabled = false;
 let videoTrack = null;
+let selectedType = "короба";
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -97,7 +101,9 @@ copyBtn.addEventListener("click", () => {
 
   if (!name && !text) return;
 
-  const combined = name ? name + "\n\n" + text : text;
+  const nameWithType = name ? `${name} (${selectedType})` : "";
+
+  const combined = nameWithType ? nameWithType + "\n\n" + text : text;
 
   navigator.clipboard.writeText(combined).then(() => {
     copyModal.classList.add("show");
@@ -162,7 +168,10 @@ function checkDuplicates() {
     shareBtn.onclick = () => {
       const name = nameInputRef.value.trim();
       const text = textareaRef.value.trim();
-      const combined = name ? name + "\n\n" + text : text;
+
+      const nameWithType = name ? `${name} (${selectedType})` : "";
+
+      const combined = nameWithType ? nameWithType + "\n\n" + text : text;
 
       if (navigator.share) {
         navigator.share({ text: combined });
@@ -365,3 +374,27 @@ function flash(el, type) {
     el.className = "scanner-overlay";
   }, 150);
 }
+
+// =========================
+// Выподающее меню
+// =========================
+
+typeBtn.addEventListener("click", () => {
+  typeMenu.classList.toggle("hidden");
+});
+
+typeMenu.addEventListener("click", (e) => {
+  const value = e.target.dataset.value;
+  if (!value) return;
+
+  selectedType = value;
+  typeBtn.textContent = value;
+
+  typeMenu.classList.add("hidden");
+});
+
+document.addEventListener("click", (e) => {
+  if (!typeMenu.contains(e.target) && e.target !== typeBtn) {
+    typeMenu.classList.add("hidden");
+  }
+});
