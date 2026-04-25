@@ -3,20 +3,20 @@ const textareaRef = document.getElementById("myTextarea");
 const statisticTextRef = document.querySelector(".js-statistic__text");
 
 const clearBtn = document.getElementById("clearBtn");
+const copyBtn = document.getElementById("copyBtn");
+const checkBtn = document.getElementById("checkBtn");
+
 const clearModal = document.getElementById("clearModal");
 const confirmBtn = document.getElementById("confirmBtn");
 const cancelBtn = document.getElementById("cancelBtn");
 
-const copyBtn = document.getElementById("copyBtn");
 const copyModal = document.getElementById("copyModal");
 const okBtn = document.getElementById("okBtn");
-
-const checkBtn = document.getElementById("checkBtn");
 
 const scannerBtn = document.getElementById("scanner-btn");
 const qrReader = document.getElementById("qr-reader");
 
-let codeReader = null;
+let codeReader;
 let currentStream = null;
 let scannedCodes = new Set();
 let stopBtn = null;
@@ -25,7 +25,7 @@ let isScanning = false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 /* ===================== */
-/* AUDIO */
+/* AUDIO FIX */
 /* ===================== */
 
 document.body.addEventListener(
@@ -37,10 +37,41 @@ document.body.addEventListener(
 );
 
 /* ===================== */
+/* SOUND */
+/* ===================== */
+
+function playBeep(type = "ok") {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  if (type === "scan") {
+    osc.frequency.value = 1600;
+    osc.type = "square";
+  } else if (type === "error") {
+    osc.frequency.value = 300;
+    osc.type = "sawtooth";
+  } else {
+    osc.frequency.value = 1000;
+    osc.type = "sine";
+  }
+
+  gain.gain.value = 0.08;
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.12);
+}
+
+/* ===================== */
 /* CLEAR */
 /* ===================== */
 
-clearBtn.addEventListener("click", () => clearModal.classList.add("show"));
+clearBtn.addEventListener("click", () => {
+  if (!textareaRef.value && !nameInputRef.value) return;
+  clearModal.classList.add("show");
+});
 
 confirmBtn.addEventListener("click", () => {
   textareaRef.value = "";
@@ -69,6 +100,8 @@ copyBtn.addEventListener("click", () => {
   navigator.clipboard.writeText(combined).then(() => {
     copyModal.classList.add("show");
   });
+
+  playBeep("ok");
 });
 
 okBtn.addEventListener("click", () => {
@@ -76,7 +109,7 @@ okBtn.addEventListener("click", () => {
 });
 
 /* ===================== */
-/* CHECK + DUPLICATES + SHARE */
+/* CHECK DUPLICATES + SHARE BUTTON */
 /* ===================== */
 
 checkBtn.addEventListener("click", checkDuplicates);
@@ -88,10 +121,9 @@ function checkDuplicates() {
     .split(/\s+/)
     .filter(Boolean);
 
-  if (!values.length) {
-    statisticTextRef.innerHTML = "";
-    return;
-  }
+  statisticTextRef.innerHTML = "";
+
+  if (!values.length) return;
 
   const seen = {};
   const duplicates = [];
@@ -101,24 +133,22 @@ function checkDuplicates() {
     else seen[v] = true;
   });
 
-  statisticTextRef.innerHTML = "";
-
   if (duplicates.length) {
     const info = document.createElement("div");
     info.innerHTML = `Повторов: <b>${duplicates.length}</b>`;
 
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "Удалить дубли";
-    delBtn.className = "btn";
-    delBtn.style.marginTop = "10px";
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Удалить повторы";
+    deleteBtn.className = "btn";
+    deleteBtn.style.marginTop = "10px";
 
-    delBtn.onclick = () => {
+    deleteBtn.onclick = () => {
       textareaRef.value = [...new Set(values)].join("\n");
       checkDuplicates();
     };
 
     statisticTextRef.appendChild(info);
-    statisticTextRef.appendChild(delBtn);
+    statisticTextRef.appendChild(deleteBtn);
   } else {
     statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
 
@@ -144,31 +174,6 @@ function checkDuplicates() {
 }
 
 /* ===================== */
-/* SOUND */
-/* ===================== */
-
-function playBeep(type) {
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  if (type === "scan") {
-    osc.frequency.value = 1500;
-    osc.type = "square";
-  } else {
-    osc.frequency.value = 300;
-    osc.type = "sawtooth";
-  }
-
-  gain.gain.value = 0.1;
-
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.1);
-}
-
-/* ===================== */
 /* SCANNER */
 /* ===================== */
 
@@ -179,15 +184,13 @@ async function startScanner() {
   isScanning = true;
 
   scannerBtn.style.display = "none";
-
   qrReader.style.display = "block";
   qrReader.innerHTML = "";
 
   stopBtn = document.createElement("button");
-  stopBtn.textContent = "STOP";
   stopBtn.className = "stop-btn";
+  stopBtn.textContent = "STOP";
   document.body.appendChild(stopBtn);
-
   stopBtn.onclick = stopScanner;
 
   const video = document.createElement("video");
@@ -200,21 +203,37 @@ async function startScanner() {
   const scanBox = document.createElement("div");
   scanBox.className = "scan-box";
 
-  qrReader.appendChild(video);
-  qrReader.appendChild(overlay);
-  qrReader.appendChild(scanBox);
+  qrReader.append(video, overlay, scanBox);
 
   try {
     currentStream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: "environment",
+        facingMode: { ideal: "environment" },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
       },
     });
 
     video.srcObject = currentStream;
     await video.play();
 
-    codeReader = new ZXing.BrowserMultiFormatReader();
+    const track = currentStream.getVideoTracks()[0];
+    const caps = track.getCapabilities?.() || {};
+
+    // 🔥 ВОССТАНОВЛЕНИЕ ФОКУСА / СТАБИЛЬНОСТИ
+    try {
+      await track.applyConstraints({
+        advanced: [
+          ...(caps.focusMode ? [{ focusMode: "continuous" }] : []),
+          ...(caps.torch ? [{ torch: false }] : []),
+        ],
+      });
+    } catch (e) {}
+
+    // 🔥 ВАЖНО: быстрый режим ZXing (как у тебя было)
+    codeReader = new ZXing.BrowserMultiFormatReader(undefined, {
+      delayBetweenScanAttempts: 30, // КЛЮЧ К СКОРОСТИ
+    });
 
     codeReader.decodeFromVideoDevice(null, video, (result) => {
       if (!result) return;
@@ -226,19 +245,21 @@ async function startScanner() {
         textareaRef.value += (textareaRef.value ? "\n" : "") + text;
 
         playBeep("scan");
+        flash(overlay, "success");
       } else {
         playBeep("error");
+        flash(overlay, "error");
       }
     });
   } catch (e) {
     console.error(e);
-    alert("Нет доступа к камере");
+    alert("Camera error");
     stopScanner();
   }
 }
 
 /* ===================== */
-/* STOP */
+/* STOP SCANNER */
 /* ===================== */
 
 function stopScanner() {
@@ -260,4 +281,16 @@ function stopScanner() {
   if (stopBtn) stopBtn.remove();
 
   scannerBtn.style.display = "block";
+}
+
+/* ===================== */
+/* FLASH */
+/* ===================== */
+
+function flash(el, type) {
+  el.className = "scanner-overlay " + type;
+
+  setTimeout(() => {
+    el.className = "scanner-overlay";
+  }, 150);
 }

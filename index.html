@@ -2,64 +2,49 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Сканер кодов</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scanner</title>
 
     <link rel="stylesheet" href="./css/styles.css" />
-
-    <meta name="theme-color" content="#0f0f0f" />
   </head>
 
   <body>
     <div class="container">
-      <input type="text" id="nameInput" placeholder="Имя" />
+      <input id="nameInput" placeholder="Имя" />
+      <textarea id="myTextarea" placeholder="Коды"></textarea>
 
-      <textarea
-        id="myTextarea"
-        placeholder="Сканируйте или вставьте коды"
-      ></textarea>
+      <button id="scanner-btn" class="btn">СКАНИРОВАТЬ</button>
 
-      <!-- кнопка сканера -->
-      <button id="scanner-btn" class="btn main-scan-btn">СКАНИРОВАТЬ</button>
-
-      <!-- сканер (скрыт) -->
-      <div id="qr-reader" class="hidden"></div>
+      <div id="qr-reader"></div>
 
       <div class="statistic">
-        <p class="statistic__text js-statistic__text"></p>
+        <p class="js-statistic__text statistic__text"></p>
       </div>
     </div>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ -->
     <div class="bottom-bar">
-      <button class="bottom-btn" id="checkBtn">Проверить</button>
-      <button class="bottom-btn" id="clearBtn">Очистить</button>
-      <button class="bottom-btn" id="copyBtn">Копировать</button>
+      <button id="checkBtn" class="bottom-btn">Проверить</button>
+      <button id="clearBtn" class="bottom-btn">Очистить</button>
+      <button id="copyBtn" class="bottom-btn">Копировать</button>
     </div>
 
-    <!-- МОДАЛКИ -->
+    <!-- modals -->
     <div id="clearModal" class="modal">
       <div class="modal-content">
-        <p>Очистить всё?</p>
-        <button class="ok confirm" id="confirmBtn">Да</button>
-        <button class="cancel confirm" id="cancelBtn">Отмена</button>
+        <p>Очистить?</p>
+        <button id="confirmBtn" class="ok confirm">Да</button>
+        <button id="cancelBtn" class="cancel confirm">Нет</button>
       </div>
     </div>
 
     <div id="copyModal" class="modal">
       <div class="modal-content">
         <p>Скопировано</p>
-        <button class="cancel confirm" id="okBtn">ОК</button>
+        <button id="okBtn" class="cancel confirm">OK</button>
       </div>
     </div>
 
-    <!-- ZXING -->
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
-
-    <!-- ТВОЙ JS -->
     <script src="./js/index.js"></script>
   </body>
 </html>
