@@ -374,3 +374,25 @@ textarea {
   background: #ff4444;
   color: #fff;
 }
+
+/* === */
+
+.scan-live-box {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  text-align: center;
+
+  min-width: 100px;
+  padding: 12px 20px;
+  border-radius: 10px;
+
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid hsla(200, 100%, 50%, 0.15);
+
+  color: #00ff88;
+  font-size: 30px;
+  font-weight: bold;
+
+  z-index: 2000;
+}

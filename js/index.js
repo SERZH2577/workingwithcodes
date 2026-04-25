@@ -31,6 +31,7 @@ let isScanning = false;
 let torchEnabled = false;
 let videoTrack = null;
 let selectedType = "короба";
+let liveBox = null;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -224,6 +225,17 @@ async function startScanner() {
   qrReader.style.display = "block";
   qrReader.innerHTML = "";
 
+  const existingCodes = [
+    ...new Set(
+      textareaRef.value
+        .split("\n")
+        .map((v) => v.trim())
+        .filter(Boolean)
+    ),
+  ];
+
+  scannedCodes = new Set(existingCodes);
+
   stopBtn = document.createElement("button");
   stopBtn.className = "stop-btn";
   stopBtn.textContent = "STOP";
@@ -260,6 +272,11 @@ async function startScanner() {
 
   const overlay = document.createElement("div");
   overlay.className = "scanner-overlay";
+
+  liveBox = document.createElement("div");
+  liveBox.className = "scan-live-box";
+  liveBox.textContent = scannedCodes.size;
+  qrReader.appendChild(liveBox);
 
   const scanBox = document.createElement("div");
   scanBox.className = "scan-box";
@@ -321,6 +338,8 @@ async function startScanner() {
 
       if (!scannedCodes.has(text)) {
         scannedCodes.add(text);
+        liveBox.textContent = scannedCodes.size;
+
         textareaRef.value += (textareaRef.value ? "\n" : "") + text;
 
         playBeep("scan");
@@ -370,6 +389,10 @@ function stopScanner() {
     currentStream = null;
   }
 
+  if (statValue) {
+    statValue.textContent = scannedCodes.size;
+  }
+
   qrReader.innerHTML = "";
   qrReader.style.display = "none";
 
@@ -377,6 +400,11 @@ function stopScanner() {
 
   const torchBtn = document.querySelector(".torch-btn");
   if (torchBtn) torchBtn.remove();
+
+  if (liveBox) {
+    liveBox.remove();
+    liveBox = null;
+  }
 
   scannerBtn.style.display = "block";
 }
