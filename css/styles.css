@@ -128,15 +128,15 @@ textarea {
 }
 
 .clean-btn {
-  border: 1px solid hsla(0, 100%, 50%, 0.15);
+  border: 2px solid hsla(0, 100%, 50%, 0.2);
 }
 
 .check-btn {
-  border: 1px solid hsla(200, 100%, 50%, 0.15);
+  border: 2px solid hsla(200, 100%, 50%, 0.15);
 }
 
 .copy-btn {
-  border: 1px solid hsla(134, 100%, 50%, 0.1);
+  border: 2px solid hsla(134, 100%, 50%, 0.1);
 }
 
 /* modal */
