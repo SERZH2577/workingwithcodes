@@ -28,7 +28,17 @@
       <div id="qr-reader"></div>
 
       <div class="statistic">
-        <p class="js-statistic__text statistic__text"></p>
+        <div class="statistic__title js-statistic__title"></div>
+
+        <div class="statistic__row">
+          <!-- РАМКА -->
+          <div class="statistic__box">
+            <div class="statistic__value js-statistic__value">0</div>
+          </div>
+
+          <!-- КНОПКА (ОТДЕЛЬНО!) -->
+          <button id="statActionBtn" class="statistic__action hidden"></button>
+        </div>
       </div>
     </div>
 

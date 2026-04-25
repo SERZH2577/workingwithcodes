@@ -19,6 +19,10 @@ const qrReader = document.getElementById("qr-reader");
 const typeBtn = document.getElementById("typeBtn");
 const typeMenu = document.getElementById("typeMenu");
 
+const statTitle = document.querySelector(".js-statistic__title");
+const statValue = document.querySelector(".js-statistic__value");
+const statActionBtn = document.getElementById("statActionBtn");
+
 let codeReader;
 let currentStream = null;
 let scannedCodes = new Set();
@@ -82,9 +86,13 @@ clearBtn.addEventListener("click", () => {
 confirmBtn.addEventListener("click", () => {
   textareaRef.value = "";
   nameInputRef.value = "";
-  statisticTextRef.innerHTML = "";
+
   scannedCodes.clear();
   clearModal.classList.remove("show");
+
+  statTitle.textContent = "";
+  statValue.textContent = 0;
+  statActionBtn.classList.add("hidden");
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -129,59 +137,69 @@ function checkDuplicates() {
     .split(/\s+/)
     .filter(Boolean);
 
-  statisticTextRef.innerHTML = "";
-
-  if (!values.length) return;
+  const total = values.length;
 
   const seen = {};
-  const duplicates = [];
+  let duplicates = 0;
 
   values.forEach((v) => {
-    if (seen[v]) duplicates.push(v);
+    if (seen[v]) duplicates++;
     else seen[v] = true;
   });
 
-  if (duplicates.length) {
-    const info = document.createElement("div");
-    info.innerHTML = `Повторов: <b>${duplicates.length}</b>`;
+  // всегда обновляем число
+  statValue.textContent = total;
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Удалить повторы";
-    deleteBtn.className = "btn";
-    deleteBtn.style.marginTop = "10px";
+  // сброс кнопки
+  statActionBtn.classList.add("hidden");
+  statActionBtn.onclick = null;
 
-    deleteBtn.onclick = () => {
+  // НЕТ ДАННЫХ
+  if (total === 0) {
+    statTitle.textContent = "";
+    statValue.textContent = 0;
+    return;
+  }
+
+  // ❌ ЕСТЬ ПОВТОРЫ
+  if (duplicates > 0) {
+    statTitle.textContent = "Есть повторы!";
+    statValue.textContent = duplicates;
+
+    statActionBtn.textContent = "Удалить";
+    statActionBtn.className = "statistic__action delete";
+
+    statActionBtn.classList.remove("hidden");
+
+    statActionBtn.onclick = () => {
       textareaRef.value = [...new Set(values)].join("\n");
       checkDuplicates();
     };
 
-    statisticTextRef.appendChild(info);
-    statisticTextRef.appendChild(deleteBtn);
-  } else {
-    statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
-
-    const shareBtn = document.createElement("button");
-    shareBtn.textContent = "Поделиться";
-    shareBtn.className = "btn";
-    shareBtn.style.marginTop = "10px";
-
-    shareBtn.onclick = () => {
-      const name = nameInputRef.value.trim();
-      const text = textareaRef.value.trim();
-
-      const nameWithType = name ? `${name} (${selectedType})` : "";
-
-      const combined = nameWithType ? nameWithType + "\n\n" + text : text;
-
-      if (navigator.share) {
-        navigator.share({ text: combined });
-      } else {
-        navigator.clipboard.writeText(combined);
-      }
-    };
-
-    statisticTextRef.appendChild(shareBtn);
+    return;
   }
+
+  // ✅ НЕТ ПОВТОРОВ
+  statTitle.textContent = "Повторов нет";
+  statValue.textContent = total;
+
+  statActionBtn.textContent = "Поделиться";
+  statActionBtn.className = "statistic__action share";
+
+  statActionBtn.classList.remove("hidden");
+
+  statActionBtn.onclick = () => {
+    const name = nameInputRef.value.trim();
+    const text = textareaRef.value.trim();
+
+    const combined = name ? name + "\n\n" + text : text;
+
+    if (navigator.share) {
+      navigator.share({ text: combined });
+    } else {
+      navigator.clipboard.writeText(combined);
+    }
+  };
 }
 
 /* ===================== */
