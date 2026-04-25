@@ -25,7 +25,7 @@ let isScanning = false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 /* ===================== */
-/* AUDIO FIX */
+/* AUDIO */
 /* ===================== */
 
 document.body.addEventListener(
@@ -40,9 +40,7 @@ document.body.addEventListener(
 /* CLEAR */
 /* ===================== */
 
-clearBtn.addEventListener("click", () => {
-  clearModal.classList.add("show");
-});
+clearBtn.addEventListener("click", () => clearModal.classList.add("show"));
 
 confirmBtn.addEventListener("click", () => {
   textareaRef.value = "";
@@ -78,7 +76,7 @@ okBtn.addEventListener("click", () => {
 });
 
 /* ===================== */
-/* CHECK / DUPLICATES / SHARE */
+/* CHECK + DUPLICATES + SHARE */
 /* ===================== */
 
 checkBtn.addEventListener("click", checkDuplicates);
@@ -106,21 +104,21 @@ function checkDuplicates() {
   statisticTextRef.innerHTML = "";
 
   if (duplicates.length) {
-    const repeatInfo = document.createElement("div");
-    repeatInfo.innerHTML = `Повторов: <b>${duplicates.length}</b>`;
+    const info = document.createElement("div");
+    info.innerHTML = `Повторов: <b>${duplicates.length}</b>`;
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Удалить дубли";
-    deleteBtn.className = "btn";
-    deleteBtn.style.marginTop = "10px";
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Удалить дубли";
+    delBtn.className = "btn";
+    delBtn.style.marginTop = "10px";
 
-    deleteBtn.onclick = () => {
+    delBtn.onclick = () => {
       textareaRef.value = [...new Set(values)].join("\n");
       checkDuplicates();
     };
 
-    statisticTextRef.appendChild(repeatInfo);
-    statisticTextRef.appendChild(deleteBtn);
+    statisticTextRef.appendChild(info);
+    statisticTextRef.appendChild(delBtn);
   } else {
     statisticTextRef.innerHTML = `Всего <b>${values.length}</b>`;
 
@@ -240,7 +238,7 @@ async function startScanner() {
 }
 
 /* ===================== */
-/* STOP SCANNER */
+/* STOP */
 /* ===================== */
 
 function stopScanner() {
