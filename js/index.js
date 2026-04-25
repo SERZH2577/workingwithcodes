@@ -21,6 +21,8 @@ let currentStream = null;
 let scannedCodes = new Set();
 let stopBtn = null;
 let isScanning = false;
+let torchEnabled = false;
+let videoTrack = null;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -193,6 +195,30 @@ async function startScanner() {
   document.body.appendChild(stopBtn);
   stopBtn.onclick = stopScanner;
 
+  const torchBtn = document.createElement("button");
+  torchBtn.textContent = "🔦";
+  torchBtn.className = "torch-btn";
+  document.body.appendChild(torchBtn);
+
+  torchBtn.onclick = async () => {
+    if (!videoTrack) return;
+
+    const caps = videoTrack.getCapabilities?.();
+    if (!caps?.torch) return;
+
+    try {
+      torchEnabled = !torchEnabled;
+
+      await videoTrack.applyConstraints({
+        advanced: [{ torch: torchEnabled }],
+      });
+
+      torchBtn.classList.toggle("active", torchEnabled);
+    } catch (e) {
+      console.log("Torch not supported", e);
+    }
+  };
+
   const video = document.createElement("video");
   video.autoplay = true;
   video.playsInline = true;
@@ -216,6 +242,8 @@ async function startScanner() {
 
     video.srcObject = currentStream;
     await video.play();
+
+    videoTrack = currentStream.getVideoTracks()[0];
 
     const track = currentStream.getVideoTracks()[0];
     const caps = track.getCapabilities?.() || {};
@@ -265,6 +293,16 @@ async function startScanner() {
 function stopScanner() {
   isScanning = false;
 
+  torchEnabled = false;
+
+  if (videoTrack) {
+    try {
+      videoTrack.applyConstraints({
+        advanced: [{ torch: false }],
+      });
+    } catch (e) {}
+  }
+
   if (codeReader) {
     codeReader.reset();
     codeReader = null;
@@ -279,6 +317,9 @@ function stopScanner() {
   qrReader.style.display = "none";
 
   if (stopBtn) stopBtn.remove();
+
+  const torchBtn = document.querySelector(".torch-btn");
+  if (torchBtn) torchBtn.remove();
 
   scannerBtn.style.display = "block";
 }

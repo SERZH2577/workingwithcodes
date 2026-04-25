@@ -156,3 +156,29 @@ textarea {
   background: #00ff88;
   color: #000;
 }
+
+/* ==== */
+
+.torch-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 12px;
+  border: none;
+
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 20px;
+
+  z-index: 3000;
+  backdrop-filter: blur(6px);
+}
+
+.torch-btn.active {
+  background: #00ff88;
+  color: black;
+}
