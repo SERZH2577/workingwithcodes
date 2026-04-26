@@ -196,6 +196,58 @@ function uiSuccess(audioCtx) {
   osc2.stop(now + 0.3);
 }
 
+function playFailBzzt() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const now = ctx.currentTime;
+
+  const master = ctx.createGain();
+  master.gain.value = 0.5;
+  master.connect(ctx.destination);
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 420;
+  filter.Q.value = 0.7;
+  filter.connect(master);
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = "square";
+
+  osc.frequency.setValueAtTime(170, now);
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.setValueAtTime(0.9, now + 0.003);
+  gain.gain.setValueAtTime(0.0, now + 0.085);
+
+  osc.connect(gain);
+  gain.connect(filter);
+
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.06, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < data.length; i++) {
+    data[i] = (Math.random() * 2 - 1) * 0.22;
+  }
+
+  const noise = ctx.createBufferSource();
+  const noiseGain = ctx.createGain();
+
+  noise.buffer = buffer;
+
+  noiseGain.gain.setValueAtTime(0.22, now);
+  noiseGain.gain.setValueAtTime(0.0, now + 0.06);
+
+  noise.connect(noiseGain);
+  noiseGain.connect(filter);
+
+  osc.start(now);
+  noise.start(now);
+
+  osc.stop(now + 0.09);
+  noise.stop(now + 0.06);
+}
+
 /* ===================== */
 /* CLEAR */
 /* ===================== */
@@ -303,6 +355,8 @@ function checkDuplicates() {
 
     statValue.textContent = duplicates;
     statValue.style.color = "#ff3333";
+
+    playFailBzzt();
 
     statActionBtn.textContent = "Удалить";
     statActionBtn.className = "statistic__action delete";
