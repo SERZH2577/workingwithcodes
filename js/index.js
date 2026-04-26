@@ -130,7 +130,7 @@ function playClick() {
   const osc1 = audioCtx.createOscillator();
   const gain1 = audioCtx.createGain();
 
-  osc1.type = "square";
+  osc1.type = "triangle";
   osc1.frequency.setValueAtTime(1200, now);
   osc1.frequency.exponentialRampToValueAtTime(300, now + 0.03);
 

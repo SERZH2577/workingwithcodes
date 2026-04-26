@@ -101,7 +101,7 @@ textarea {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
   font-size: 20px;
   color: #fff;
   padding: 14px 20px;
@@ -378,7 +378,7 @@ textarea {
 
   width: 62px;
   height: 62px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 
   border: 2px solid hsla(51, 100%, 50%, 0.25);
   border-radius: 12px;
