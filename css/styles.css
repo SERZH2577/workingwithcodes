@@ -396,3 +396,12 @@ textarea {
 
   z-index: 2000;
 }
+
+.torch-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.torch-btn.active img {
+  filter: brightness(0) invert(1);
+}

@@ -322,8 +322,8 @@ async function startScanner() {
   stopBtn.onclick = stopScanner;
 
   const torchBtn = document.createElement("button");
-  torchBtn.textContent = "🔦";
   torchBtn.className = "torch-btn";
+  torchBtn.innerHTML = `<img src="./img/flashlight.svg" alt="flashlight" />`;
   document.body.appendChild(torchBtn);
 
   torchBtn.onclick = async () => {
