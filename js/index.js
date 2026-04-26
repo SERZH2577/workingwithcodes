@@ -42,6 +42,7 @@ copyBtn.style.opacity = 0.5;
 const clearSound = new Audio("./sounds/clear.mp3");
 clearSound.preload = "auto";
 clearSound.volume = 0.8;
+clearSound.load();
 
 /* ===================== */
 /* AUDIO FIX */
@@ -132,6 +133,9 @@ clearBtn.addEventListener("click", () => {
 });
 
 confirmBtn.addEventListener("click", () => {
+  clearSound.currentTime = 0;
+  clearSound.play();
+
   textareaRef.value = "";
   nameInputRef.value = "";
 
@@ -145,9 +149,6 @@ confirmBtn.addEventListener("click", () => {
   isValidatedNoDuplicates = false;
   copyBtn.disabled = true;
   copyBtn.style.opacity = 0.5;
-
-  clearSound.currentTime = 0;
-  clearSound.play();
 });
 
 cancelBtn.addEventListener("click", () => {
