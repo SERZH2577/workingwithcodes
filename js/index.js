@@ -124,22 +124,40 @@ function playBroom() {
 }
 
 function playClick() {
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
+  const now = audioCtx.currentTime;
 
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
+  // 1. УДАР (резкий щелчок)
+  const osc1 = audioCtx.createOscillator();
+  const gain1 = audioCtx.createGain();
 
-  // короткий "клик"
-  osc.type = "square";
-  osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.05);
+  osc1.type = "square";
+  osc1.frequency.setValueAtTime(1200, now);
+  osc1.frequency.exponentialRampToValueAtTime(300, now + 0.03);
 
-  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  gain1.gain.setValueAtTime(0.25, now);
+  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.05);
+  osc1.connect(gain1);
+  gain1.connect(audioCtx.destination);
+
+  osc1.start(now);
+  osc1.stop(now + 0.03);
+
+  // 2. "ХВОСТ" (механическое докликивание)
+  const osc2 = audioCtx.createOscillator();
+  const gain2 = audioCtx.createGain();
+
+  osc2.type = "triangle";
+  osc2.frequency.setValueAtTime(200, now + 0.01);
+
+  gain2.gain.setValueAtTime(0.15, now + 0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+  osc2.connect(gain2);
+  gain2.connect(audioCtx.destination);
+
+  osc2.start(now + 0.01);
+  osc2.stop(now + 0.08);
 }
 
 /* ===================== */
