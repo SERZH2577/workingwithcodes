@@ -32,8 +32,16 @@ let torchEnabled = false;
 let videoTrack = null;
 let selectedType = "короба";
 let liveBox = null;
+let isValidatedNoDuplicates = false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+copyBtn.disabled = true;
+copyBtn.style.opacity = 0.5;
+
+const clearSound = new Audio("./sounds/clear.mp3");
+clearSound.preload = "auto";
+clearSound.volume = 0.8;
 
 /* ===================== */
 /* AUDIO FIX */
@@ -44,7 +52,7 @@ document.body.addEventListener(
   () => {
     if (audioCtx.state === "suspended") audioCtx.resume();
   },
-  { once: true }
+  { once: true },
 );
 
 /* ===================== */
@@ -75,6 +83,45 @@ function playBeep(type = "ok") {
   osc.stop(audioCtx.currentTime + 0.12);
 }
 
+function playBroom() {
+  const duration = 0.25;
+
+  const bufferSize = audioCtx.sampleRate * duration;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // генерим "шум" (как шуршание)
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "lowpass";
+
+  // эффект "сметания" — фильтр уходит вниз
+  filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+  filter.frequency.exponentialRampToValueAtTime(
+    200,
+    audioCtx.currentTime + duration,
+  );
+
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioCtx.currentTime + duration,
+  );
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  noise.start();
+}
+
 /* ===================== */
 /* CLEAR */
 /* ===================== */
@@ -94,6 +141,13 @@ confirmBtn.addEventListener("click", () => {
   statTitle.textContent = "";
   statValue.textContent = 0;
   statActionBtn.classList.add("hidden");
+
+  isValidatedNoDuplicates = false;
+  copyBtn.disabled = true;
+  copyBtn.style.opacity = 0.5;
+
+  clearSound.currentTime = 0;
+  clearSound.play();
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -148,6 +202,10 @@ function checkDuplicates() {
     else seen[v] = true;
   });
 
+  isValidatedNoDuplicates = false;
+  copyBtn.disabled = true;
+  copyBtn.style.opacity = 0.5;
+
   // всегда обновляем число
   statValue.textContent = total;
 
@@ -184,6 +242,10 @@ function checkDuplicates() {
   statTitle.textContent = "Повторов нет";
   statValue.textContent = total;
 
+  isValidatedNoDuplicates = true;
+  copyBtn.disabled = false;
+  copyBtn.style.opacity = 1;
+
   statActionBtn.textContent = "Поделиться";
   statActionBtn.className = "statistic__action share";
 
@@ -202,6 +264,22 @@ function checkDuplicates() {
     }
   };
 }
+
+/* ===================== */
+/* Отслеживание изменений textarea */
+/* ===================== */
+
+textareaRef.addEventListener("input", () => {
+  if (isValidatedNoDuplicates) {
+    statTitle.textContent = "";
+    statActionBtn.classList.add("hidden");
+
+    isValidatedNoDuplicates = false;
+
+    copyBtn.disabled = true;
+    copyBtn.style.opacity = 0.5;
+  }
+});
 
 /* ===================== */
 /* SCANNER */
@@ -230,7 +308,7 @@ async function startScanner() {
       textareaRef.value
         .split("\n")
         .map((v) => v.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     ),
   ];
 
@@ -341,6 +419,7 @@ async function startScanner() {
         liveBox.textContent = scannedCodes.size;
 
         textareaRef.value += (textareaRef.value ? "\n" : "") + text;
+        textareaRef.dispatchEvent(new Event("input"));
 
         playBeep("scan");
         flash(overlay, "success");
