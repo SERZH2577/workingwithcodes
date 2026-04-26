@@ -82,7 +82,7 @@ textarea {
 /* GREEN FRAME BOX (как раньше) */
 .scan-box {
   position: absolute;
-  top: calc(30% - 30px);
+  top: calc(30% - 80px);
   left: 10%;
   width: 80%;
   height: 40%;
@@ -353,8 +353,8 @@ textarea {
 
 .scan-live-box {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 20px;
+  left: 20px;
   text-align: center;
 
   min-width: 100px;
