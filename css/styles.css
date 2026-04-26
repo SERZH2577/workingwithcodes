@@ -82,7 +82,7 @@ textarea {
 /* GREEN FRAME BOX (как раньше) */
 .scan-box {
   position: absolute;
-  top: 30%;
+  top: calc(30% - 30px);
   left: 10%;
   width: 80%;
   height: 40%;
@@ -397,11 +397,18 @@ textarea {
   z-index: 2000;
 }
 
+.torch-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
 .torch-btn img {
-  width: 24px;
-  height: 24px;
+  width: 48px;
+  height: 48px;
 }
 
 .torch-btn.active img {
-  filter: brightness(0) invert(1);
+  filter: brightness(0) saturate(100%) invert(62%) sepia(95%) saturate(400%)
+    hue-rotate(90deg);
 }
