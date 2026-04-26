@@ -400,7 +400,7 @@ textarea {
 }
 
 .torch-btn.active img {
-  background: rgba(0, 0, 0, 0.25);
+  /* background: rgba(0, 0, 0, 0.25); */
   filter: brightness(0) saturate(100%) invert(62%) sepia(95%) saturate(400%)
     hue-rotate(90deg);
 }
