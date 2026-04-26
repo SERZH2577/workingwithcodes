@@ -134,7 +134,7 @@ function playClick() {
   osc1.frequency.setValueAtTime(1200, now);
   osc1.frequency.exponentialRampToValueAtTime(300, now + 0.03);
 
-  gain1.gain.setValueAtTime(0.1, now);
+  gain1.gain.setValueAtTime(0.12, now);
   gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
   osc1.connect(gain1);
@@ -150,7 +150,7 @@ function playClick() {
   osc2.type = "triangle";
   osc2.frequency.setValueAtTime(200, now + 0.01);
 
-  gain2.gain.setValueAtTime(0.15, now + 0.01);
+  gain2.gain.setValueAtTime(0.7, now + 0.01);
   gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
   osc2.connect(gain2);
