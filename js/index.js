@@ -123,6 +123,25 @@ function playBroom() {
   noise.start();
 }
 
+function playClick() {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  // короткий "клик"
+  osc.type = "square";
+  osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.05);
+
+  gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.05);
+}
+
 /* ===================== */
 /* CLEAR */
 /* ===================== */
@@ -334,6 +353,8 @@ async function startScanner() {
 
     try {
       torchEnabled = !torchEnabled;
+
+      playClick();
 
       await videoTrack.applyConstraints({
         advanced: [{ torch: torchEnabled }],
