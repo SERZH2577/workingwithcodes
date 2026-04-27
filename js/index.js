@@ -70,6 +70,26 @@ document.body.addEventListener(
 /* SOUND */
 /* ===================== */
 
+function playCopyTick() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(1400, now);
+
+  gain.gain.setValueAtTime(0.25, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.06);
+}
+
 function playSweepSound() {
   const ctx = getAudioCtx();
   const now = ctx.currentTime;
@@ -342,7 +362,7 @@ copyBtn.addEventListener("click", () => {
     copyModal.classList.add("show");
   });
 
-  playBeep("ok");
+  playCopyTick();
 });
 
 okBtn.addEventListener("click", () => {
