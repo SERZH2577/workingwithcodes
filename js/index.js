@@ -48,6 +48,8 @@ function getAudioCtx() {
   return audioCtx;
 }
 
+getAudioCtx();
+
 copyBtn.disabled = true;
 copyBtn.style.opacity = 0.5;
 
@@ -58,7 +60,8 @@ copyBtn.style.opacity = 0.5;
 document.body.addEventListener(
   "click",
   () => {
-    if (audioCtx.state === "suspended") audioCtx.resume();
+    const ctx = getAudioCtx();
+    if (ctx.state === "suspended") ctx.resume();
   },
   { once: true },
 );
