@@ -119,7 +119,7 @@ function playSweepSound() {
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
   const master = ctx.createGain();
-  master.gain.value = 2.5;
+  master.gain.value = 3;
 
   noise.connect(filter);
   filter.connect(gain);
