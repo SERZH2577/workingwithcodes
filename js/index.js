@@ -34,15 +34,22 @@ let selectedType = "короба";
 let liveBox = null;
 let isValidatedNoDuplicates = false;
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+
+  return audioCtx;
+}
 
 copyBtn.disabled = true;
 copyBtn.style.opacity = 0.5;
-
-const clearSound = new Audio("./sounds/clear.mp3");
-clearSound.preload = "auto";
-clearSound.volume = 0.8;
-clearSound.load();
 
 /* ===================== */
 /* AUDIO FIX */
@@ -59,6 +66,46 @@ document.body.addEventListener(
 /* ===================== */
 /* SOUND */
 /* ===================== */
+
+function playSweepSound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.28, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  let last = 0;
+  for (let i = 0; i < data.length; i++) {
+    const w = Math.random() * 2 - 1;
+    last = last * 0.95 + w * 0.05;
+    data[i] = last * 0.6;
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "bandpass";
+  filter.frequency.setValueAtTime(150, now);
+  filter.frequency.exponentialRampToValueAtTime(3000, now + 0.25);
+  filter.Q.value = 1;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.7, now + 0.05);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+  const master = ctx.createGain();
+  master.gain.value = 2;
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(master);
+  master.connect(ctx.destination);
+
+  noise.start(now);
+  noise.stop(now + 0.28);
+}
 
 function playBeep(type = "ok") {
   const osc = audioCtx.createOscillator();
@@ -91,7 +138,6 @@ function playBroom() {
   const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
   const data = buffer.getChannelData(0);
 
-  // генерим "шум" (как шуршание)
   for (let i = 0; i < bufferSize; i++) {
     data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
   }
@@ -102,7 +148,6 @@ function playBroom() {
   const filter = audioCtx.createBiquadFilter();
   filter.type = "lowpass";
 
-  // эффект "сметания" — фильтр уходит вниз
   filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
   filter.frequency.exponentialRampToValueAtTime(
     200,
@@ -126,7 +171,6 @@ function playBroom() {
 function playClick() {
   const now = audioCtx.currentTime;
 
-  // 1. УДАР (резкий щелчок)
   const osc1 = audioCtx.createOscillator();
   const gain1 = audioCtx.createGain();
 
@@ -134,7 +178,7 @@ function playClick() {
   osc1.frequency.setValueAtTime(1200, now);
   osc1.frequency.exponentialRampToValueAtTime(300, now + 0.03);
 
-  gain1.gain.setValueAtTime(0.15, now);
+  gain1.gain.setValueAtTime(0.25, now);
   gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
 
   osc1.connect(gain1);
@@ -143,14 +187,13 @@ function playClick() {
   osc1.start(now);
   osc1.stop(now + 0.03);
 
-  // 2. "ХВОСТ" (механическое докликивание)
   const osc2 = audioCtx.createOscillator();
   const gain2 = audioCtx.createGain();
 
   osc2.type = "triangle";
   osc2.frequency.setValueAtTime(200, now + 0.01);
 
-  gain2.gain.setValueAtTime(0.1, now + 0.01);
+  gain2.gain.setValueAtTime(0.15, now + 0.01);
   gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
 
   osc2.connect(gain2);
@@ -160,17 +203,17 @@ function playClick() {
   osc2.stop(now + 0.08);
 }
 
-function uiSuccess(audioCtx) {
+function uiSuccess() {
+  const ctx = getAudioCtx();
   const now = audioCtx.currentTime;
 
-  // первая нота
   const osc1 = audioCtx.createOscillator();
   const gain1 = audioCtx.createGain();
 
   osc1.type = "sine";
   osc1.frequency.setValueAtTime(600, now);
 
-  gain1.gain.setValueAtTime(0.12, now);
+  gain1.gain.setValueAtTime(0.3, now);
   gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
   osc1.connect(gain1);
@@ -179,14 +222,13 @@ function uiSuccess(audioCtx) {
   osc1.start(now);
   osc1.stop(now + 0.15);
 
-  // вторая нота (выше — “успех”)
   const osc2 = audioCtx.createOscillator();
   const gain2 = audioCtx.createGain();
 
   osc2.type = "sine";
   osc2.frequency.setValueAtTime(900, now + 0.1);
 
-  gain2.gain.setValueAtTime(0.09, now + 0.1);
+  gain2.gain.setValueAtTime(0.24, now + 0.1);
   gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
 
   osc2.connect(gain2);
@@ -197,11 +239,11 @@ function uiSuccess(audioCtx) {
 }
 
 function playFailBzzt() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = getAudioCtx();
   const now = ctx.currentTime;
 
   const master = ctx.createGain();
-  master.gain.value = 0.5;
+  master.gain.value = 0.8;
   master.connect(ctx.destination);
 
   const filter = ctx.createBiquadFilter();
@@ -258,8 +300,7 @@ clearBtn.addEventListener("click", () => {
 });
 
 confirmBtn.addEventListener("click", () => {
-  clearSound.currentTime = 0;
-  clearSound.play();
+  playSweepSound();
 
   textareaRef.value = "";
   nameInputRef.value = "";
@@ -378,9 +419,7 @@ function checkDuplicates() {
 
   statValue.style.color = "#00ff88";
 
-  if (!isValidatedNoDuplicates) {
-    uiSuccess(audioCtx);
-  }
+  uiSuccess();
 
   isValidatedNoDuplicates = true;
   copyBtn.disabled = false;
