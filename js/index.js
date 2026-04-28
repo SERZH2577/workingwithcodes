@@ -467,7 +467,10 @@ function checkDuplicates() {
     const name = nameInputRef.value.trim();
     const text = textareaRef.value.trim();
 
-    const combined = name ? name + "\n\n" + text : text;
+    const nameWithType =
+      name && selectedType ? `${name} (${selectedType})` : name;
+
+    const combined = nameWithType ? nameWithType + "\n\n" + text : text;
 
     if (navigator.share) {
       navigator.share({ text: combined });
@@ -737,7 +740,7 @@ checkboxes.forEach((checkbox) => {
       // если сняли галочку
       selectedType = null;
 
-      typeBtn.textContent = "Выбрать тип";
+      typeBtn.textContent = "Категория";
       typeBtn.style.color = "";
       typeBtn.style.borderColor = "";
     }
@@ -757,7 +760,7 @@ document.addEventListener("click", (e) => {
 
 function updateTypeButton() {
   if (!selectedType) {
-    typeBtn.textContent = "Выбрать тип";
+    typeBtn.textContent = "Категория";
     typeBtn.style.color = "";
     typeBtn.style.borderColor = "";
     return;

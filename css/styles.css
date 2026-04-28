@@ -217,7 +217,7 @@ textarea {
 }
 
 .type-btn {
-  width: 90px;
+  width: 120px;
   padding: 12px;
 
   border-radius: 12px;
@@ -231,28 +231,91 @@ textarea {
 
 .type-menu {
   position: absolute;
-  top: 110%;
+  top: 90%;
   right: 0;
 
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 10px;
+  width: 120px;
+
+  padding: 10px;
+
+  background: #111;
+  border: 2px solid #333;
+  border-radius: 12px;
 
   overflow: hidden;
   z-index: 1000;
 }
 
-.type-menu div {
-  padding: 10px 14px;
-  cursor: pointer;
+.type-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.type-menu div:hover {
-  background: #333;
+.type-option:not(:last-child) {
+  margin-bottom: 10px;
 }
 
 .hidden {
   display: none;
+}
+
+/* ========================= */
+/* КАСТОМНЫЕ ЧЕКБОКСЫ */
+/* ========================= */
+
+.type-option input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 16px;
+  height: 16px;
+
+  max-width: 16px;
+  max-height: 16px;
+
+  border: 2px solid #333;
+  border-radius: 6px;
+
+  background: transparent;
+  position: relative;
+
+  flex-shrink: 0;
+  margin: 3px;
+}
+
+/* hover */
+.type-option:hover input[type="checkbox"] {
+  border-color: #00ff88;
+}
+
+/* активное состояние */
+.type-option input[type="checkbox"]:checked {
+  border-color: #00ff88;
+}
+
+/* галочка */
+.type-option input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width: 6px;
+  height: 10px;
+
+  border: solid #00ff88;
+  border-width: 0 2px 2px 0;
+
+  transform: translate(-50%, -60%) rotate(45deg);
+
+  opacity: 0;
+}
+
+/* показываем галочку */
+.type-option input[type="checkbox"]:checked::after {
+  opacity: 1;
 }
 
 /* === */
@@ -307,7 +370,7 @@ textarea {
   width: 50%;
   min-width: 120px;
 
-  border: 1px solid #333;
+  border: 2px solid #333;
   border-radius: 12px;
 
   padding: 12px;
