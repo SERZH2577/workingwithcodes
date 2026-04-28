@@ -30,7 +30,7 @@ let stopBtn = null;
 let isScanning = false;
 let torchEnabled = false;
 let videoTrack = null;
-let selectedType = "короба";
+let selectedType = null;
 let liveBox = null;
 let isValidatedNoDuplicates = false;
 
@@ -192,7 +192,8 @@ function playBroom() {
 }
 
 function playClick() {
-  const now = audioCtx.currentTime;
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
 
   const osc1 = audioCtx.createOscillator();
   const gain1 = audioCtx.createGain();
@@ -228,7 +229,7 @@ function playClick() {
 
 function uiSuccess() {
   const ctx = getAudioCtx();
-  const now = audioCtx.currentTime;
+  const now = ctx.currentTime;
 
   const osc1 = audioCtx.createOscillator();
   const gain1 = audioCtx.createGain();
@@ -338,6 +339,14 @@ confirmBtn.addEventListener("click", () => {
   isValidatedNoDuplicates = false;
   copyBtn.disabled = true;
   copyBtn.style.opacity = 0.5;
+
+  // ✔️ СБРОС ЧЕКБОКСОВ
+  checkboxes.forEach((cb) => {
+    cb.checked = false;
+  });
+
+  selectedType = null;
+  updateTypeButton();
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -354,7 +363,8 @@ copyBtn.addEventListener("click", () => {
 
   if (!name && !text) return;
 
-  const nameWithType = name ? `${name} (${selectedType})` : "";
+  const nameWithType =
+    name && selectedType ? `${name} (${selectedType})` : name;
 
   const combined = nameWithType ? nameWithType + "\n\n" + text : text;
 
@@ -712,14 +722,31 @@ typeBtn.addEventListener("click", () => {
   typeMenu.classList.toggle("hidden");
 });
 
-typeMenu.addEventListener("click", (e) => {
-  const value = e.target.dataset.value;
-  if (!value) return;
+const checkboxes = typeMenu.querySelectorAll('input[type="checkbox"]');
 
-  selectedType = value;
-  typeBtn.textContent = value;
+checkboxes.forEach((checkbox) => {
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+      // выключаем остальные
+      checkboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+      });
 
-  typeMenu.classList.add("hidden");
+      selectedType = checkbox.value;
+    } else {
+      // если сняли галочку
+      selectedType = null;
+
+      typeBtn.textContent = "Выбрать тип";
+      typeBtn.style.color = "";
+      typeBtn.style.borderColor = "";
+    }
+    updateTypeButton();
+
+    setTimeout(() => {
+      typeMenu.classList.add("hidden");
+    }, 0);
+  });
 });
 
 document.addEventListener("click", (e) => {
@@ -727,3 +754,16 @@ document.addEventListener("click", (e) => {
     typeMenu.classList.add("hidden");
   }
 });
+
+function updateTypeButton() {
+  if (!selectedType) {
+    typeBtn.textContent = "Выбрать тип";
+    typeBtn.style.color = "";
+    typeBtn.style.borderColor = "";
+    return;
+  }
+
+  typeBtn.textContent = selectedType;
+  typeBtn.style.color = "#00ff88";
+  typeBtn.style.borderColor = "#00ff88";
+}

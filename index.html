@@ -14,11 +14,18 @@
         <input type="text" id="nameInput" placeholder="Имя" />
 
         <div class="type-select">
-          <button id="typeBtn" class="type-btn">короба</button>
+          <button id="typeBtn" class="type-btn">Выбрать тип</button>
 
           <div id="typeMenu" class="type-menu hidden">
-            <div data-value="короба">короба</div>
-            <div data-value="пары">пары</div>
+            <label class="type-item">
+              <input type="checkbox" value="короба" />
+              короба
+            </label>
+
+            <label class="type-item">
+              <input type="checkbox" value="пары" />
+              пары
+            </label>
           </div>
         </div>
       </div>
