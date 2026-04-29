@@ -34,6 +34,55 @@ let selectedType = null;
 let liveBox = null;
 let isValidatedNoDuplicates = false;
 
+// =====================
+// LOCAL STORAGE
+// =====================
+
+const STORAGE_KEY = "wwc_data_v1";
+
+function saveToStorage() {
+  const data = {
+    name: nameInputRef.value,
+    text: textareaRef.value,
+    type: selectedType,
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadFromStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+
+  try {
+    const data = JSON.parse(raw);
+
+    nameInputRef.value = data.name || "";
+    textareaRef.value = data.text || "";
+    selectedType = data.type || null;
+
+    // восстановление чекбоксов
+    if (selectedType) {
+      checkboxes.forEach((cb) => {
+        cb.checked = cb.value === selectedType;
+      });
+    }
+
+    updateTypeButton();
+
+    // обновляем счетчик
+    const values = textareaRef.value.split(/\s+/).filter(Boolean);
+
+    statValue.textContent = values.length;
+  } catch (e) {
+    console.error("Storage parse error", e);
+  }
+}
+
+function clearStorage() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
 let audioCtx;
 
 function getAudioCtx() {
@@ -347,6 +396,8 @@ confirmBtn.addEventListener("click", () => {
 
   selectedType = null;
   updateTypeButton();
+
+  clearStorage();
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -494,7 +545,11 @@ textareaRef.addEventListener("input", () => {
     copyBtn.disabled = true;
     copyBtn.style.opacity = 0.5;
   }
+
+  saveToStorage();
 });
+
+nameInputRef.addEventListener("input", saveToStorage);
 
 /* ===================== */
 /* SCANNER */
@@ -745,6 +800,7 @@ checkboxes.forEach((checkbox) => {
       typeBtn.style.borderColor = "";
     }
     updateTypeButton();
+    saveToStorage();
 
     setTimeout(() => {
       typeMenu.classList.add("hidden");
@@ -770,3 +826,5 @@ function updateTypeButton() {
   typeBtn.style.color = "#00ff88";
   typeBtn.style.borderColor = "#00ff88";
 }
+
+loadFromStorage();
