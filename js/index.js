@@ -40,6 +40,16 @@ let isValidatedNoDuplicates = false;
 
 const STORAGE_KEY = "wwc_data_v1";
 
+let saveTimeout = null;
+
+function saveToStorageDebounced() {
+  clearTimeout(saveTimeout);
+
+  saveTimeout = setTimeout(() => {
+    saveToStorage();
+  }, 300);
+}
+
 function saveToStorage() {
   const data = {
     name: nameInputRef.value,
@@ -546,10 +556,10 @@ textareaRef.addEventListener("input", () => {
     copyBtn.style.opacity = 0.5;
   }
 
-  saveToStorage();
+  saveToStorageDebounced();
 });
 
-nameInputRef.addEventListener("input", saveToStorage);
+nameInputRef.addEventListener("input", saveToStorageDebounced);
 
 /* ===================== */
 /* SCANNER */
@@ -800,7 +810,7 @@ checkboxes.forEach((checkbox) => {
       typeBtn.style.borderColor = "";
     }
     updateTypeButton();
-    saveToStorage();
+    saveToStorageDebounced();
 
     setTimeout(() => {
       typeMenu.classList.add("hidden");
