@@ -500,6 +500,11 @@ function checkDuplicates() {
 
     statActionBtn.onclick = () => {
       textareaRef.value = [...new Set(values)].join("\n");
+
+      textareaRef.dispatchEvent(new Event("input"));
+
+      saveToStorage();
+
       checkDuplicates();
     };
 
