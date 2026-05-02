@@ -369,7 +369,7 @@ textarea {
 
 /* число */
 .statistic__value {
-  font-size: 22px;
+  font-size: 33px;
   font-weight: bold;
   color: #00ff88;
 }
@@ -421,7 +421,7 @@ textarea {
   border: 2px solid hsla(200, 100%, 50%, 0.5);
 
   color: #00ff88;
-  font-size: 30px;
+  font-size: 33px;
   font-weight: bold;
 
   z-index: 2000;
@@ -474,19 +474,19 @@ textarea {
   padding: 0;
   margin-left: 20px;
 
-  color: #00ff88;
-  fill: #00ff88;
+  /* color: #00ff88;
+  fill: #00ff88; */
 }
 
 .icon-btn img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
 }
 
 .icon {
   /* fill: #00ff88; */
   fill: currentColor;
 
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
 }
