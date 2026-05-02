@@ -444,11 +444,13 @@ textarea {
 }
 
 .torch-btn img {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
 
-  filter: brightness(0) saturate(100%) invert(41%) sepia(1%) saturate(331%)
-    hue-rotate(341deg) brightness(92%) contrast(84%);
+  filter: brightness(0) invert(1);
+
+  /* filter: brightness(0) saturate(100%) invert(41%) sepia(1%) saturate(331%)
+    hue-rotate(341deg) brightness(92%) contrast(84%); */
 }
 
 .torch-btn.active img {
