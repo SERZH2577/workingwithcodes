@@ -341,7 +341,7 @@ textarea {
 }
 
 .statistic__action.delete {
-  background: #ff4444;
+  background: #cc3333;
   color: #fff;
 }
 
@@ -377,7 +377,7 @@ textarea {
 /* кнопка */
 .statistic__action {
   flex: 1;
-  height: 48px;
+  height: 62px;
 
   border-radius: 12px;
   border: none;
@@ -401,7 +401,7 @@ textarea {
 }
 
 .statistic__action.delete {
-  background: #ff4444;
+  background: #aa3333;
   color: #fff;
 }
 
@@ -473,9 +473,6 @@ textarea {
   border: none;
   padding: 0;
   margin-left: 20px;
-
-  /* color: #00ff88;
-  fill: #00ff88; */
 }
 
 .icon-btn img {

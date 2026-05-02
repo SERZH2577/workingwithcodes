@@ -484,10 +484,10 @@ function checkDuplicates() {
   // ❌ duplicates
   if (duplicates > 0) {
     statTitle.textContent = "Есть повторы!";
-    statTitle.style.color = "#ff3333";
+    statTitle.style.color = "#cc3333";
 
     statValue.textContent = duplicates;
-    statValue.style.color = "#ff3333";
+    statValue.style.color = "#cc3333";
 
     playFailBzzt();
 
