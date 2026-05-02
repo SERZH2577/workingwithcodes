@@ -79,7 +79,6 @@ textarea {
   opacity: 1;
 }
 
-/* GREEN FRAME BOX (как раньше) */
 .scan-box {
   position: absolute;
   top: calc(30% - 80px);
@@ -87,13 +86,12 @@ textarea {
   width: 80%;
   height: 40%;
 
-  border: 2px solid hsla(134, 100%, 50%, 0.2);
+  border: 2px solid hsla(133, 100%, 33%, 0.3);
   border-radius: 10px;
 
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
 }
 
-/* STOP */
 .stop-btn {
   position: fixed;
   width: 120px;
@@ -101,16 +99,15 @@ textarea {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.3);
+  background: hsla(0, 100%, 55%, 0.03);
   font-size: 20px;
   color: #fff;
   padding: 14px 20px;
-  border: 2px solid hsla(0, 100%, 50%, 0.2);
+  border: 2px solid hsla(0, 100%, 55%, 0.25);
   border-radius: 12px;
   z-index: 2000;
 }
 
-/* bottom bar */
 .bottom-bar {
   position: fixed;
   bottom: 0;
@@ -141,8 +138,8 @@ textarea {
 }
 
 .clean-btn {
-  background: #1a1a1a;
-  border: 2px solid hsla(0, 100%, 50%, 0.15);
+  background: hsla(0, 100%, 55%, 0.03);
+  border: 2px solid hsla(0, 100%, 55%, 0.25);
 }
 
 .check-btn {
@@ -151,8 +148,8 @@ textarea {
 }
 
 .scan-btn {
-  background: hsla(134, 100%, 50%, 0.03);
-  border: 2px solid hsla(134, 100%, 50%, 0.2);
+  background: hsla(133, 100%, 33%, 0.03);
+  border: 2px solid hsla(133, 100%, 33%, 0.3);
 }
 
 /* .copy-btn {
@@ -160,7 +157,6 @@ textarea {
   border: 2px solid hsla(134, 100%, 50%, 0.1);
 } */
 
-/* modal */
 .modal {
   display: none;
   position: fixed;
@@ -197,19 +193,17 @@ textarea {
 }
 
 .ok {
-  background: hsla(0, 100%, 50%, 0.15);
-  border: 2px solid hsla(0, 100%, 50%, 0.15);
+  background: hsla(0, 100%, 55%, 0.03);
+  border: 2px solid hsla(0, 100%, 55%, 0.25);
   color: #fff;
   margin-right: 8px;
 }
 
 .cancel {
-  background: hsla(200, 100%, 50%, 0.15);
-  border: 2px solid hsla(200, 100%, 50%, 0.15);
+  background: hsla(200, 100%, 50%, 0.03);
+  border: 2px solid hsla(200, 100%, 50%, 0.2);
   color: #fff;
 }
-
-/* +++ */
 
 .name-row {
   display: flex;
@@ -423,8 +417,8 @@ textarea {
   padding: 12px 20px;
   border-radius: 10px;
 
-  background: rgba(0, 0, 0, 0.2);
-  border: 2px solid hsla(200, 100%, 50%, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  border: 2px solid hsla(200, 100%, 50%, 0.5);
 
   color: #00ff88;
   font-size: 30px;
@@ -440,9 +434,9 @@ textarea {
 
   width: 62px;
   height: 62px;
-  background: rgba(0, 0, 0, 0.3);
+  background: hsla(52, 100%, 50%, 0.03);
 
-  border: 2px solid hsla(51, 100%, 50%, 0.25);
+  border: 2px solid hsla(52, 100%, 50%, 0.25);
   border-radius: 12px;
   padding: 0;
 
