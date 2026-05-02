@@ -3,8 +3,9 @@ const textareaRef = document.getElementById("myTextarea");
 const statisticTextRef = document.querySelector(".js-statistic__text");
 
 const clearBtn = document.getElementById("clearBtn");
-const copyBtn = document.getElementById("copyBtn");
 const checkBtn = document.getElementById("checkBtn");
+const scannerBtn = document.getElementById("scanner-btn");
+const qrReader = document.getElementById("qr-reader");
 
 const clearModal = document.getElementById("clearModal");
 const confirmBtn = document.getElementById("confirmBtn");
@@ -13,15 +14,15 @@ const cancelBtn = document.getElementById("cancelBtn");
 const copyModal = document.getElementById("copyModal");
 const okBtn = document.getElementById("okBtn");
 
-const scannerBtn = document.getElementById("scanner-btn");
-const qrReader = document.getElementById("qr-reader");
-
 const typeBtn = document.getElementById("typeBtn");
 const typeMenu = document.getElementById("typeMenu");
 
 const statTitle = document.querySelector(".js-statistic__title");
 const statValue = document.querySelector(".js-statistic__value");
-const statActionBtn = document.getElementById("statActionBtn");
+
+const copyBtn = document.getElementById("copyBtn");
+const shareBtn = document.getElementById("shareBtn");
+const deleteBtn = document.getElementById("deleteBtn");
 
 let codeReader;
 let currentStream = null;
@@ -109,8 +110,7 @@ function getAudioCtx() {
 
 getAudioCtx();
 
-copyBtn.disabled = true;
-copyBtn.style.opacity = 0.5;
+copyBtn.classList.add("hidden");
 
 /* ===================== */
 /* AUDIO FIX */
@@ -393,11 +393,13 @@ confirmBtn.addEventListener("click", () => {
 
   statTitle.textContent = "";
   statValue.textContent = 0;
-  statActionBtn.classList.add("hidden");
 
   isValidatedNoDuplicates = false;
-  copyBtn.disabled = true;
-  copyBtn.style.opacity = 0.5;
+  copyBtn.classList.add("hidden");
+  shareBtn.classList.add("hidden");
+  deleteBtn.classList.add("hidden");
+
+  statValue.style.color = "#00ff88";
 
   // ✔️ СБРОС ЧЕКБОКСОВ
   checkboxes.forEach((cb) => {
@@ -466,24 +468,20 @@ function checkDuplicates() {
   });
 
   isValidatedNoDuplicates = false;
-  copyBtn.disabled = true;
-  copyBtn.style.opacity = 0.5;
 
-  // всегда обновляем число
+  // reset UI
+  copyBtn.classList.add("hidden");
+  shareBtn.classList.add("hidden");
+  deleteBtn.classList.add("hidden");
+
   statValue.textContent = total;
 
-  // сброс кнопки
-  statActionBtn.classList.add("hidden");
-  statActionBtn.onclick = null;
-
-  // НЕТ ДАННЫХ
   if (total === 0) {
     statTitle.textContent = "";
-    statValue.textContent = 0;
     return;
   }
 
-  // ❌ ЕСТЬ ПОВТОРЫ
+  // ❌ duplicates
   if (duplicates > 0) {
     statTitle.textContent = "Есть повторы!";
     statTitle.style.color = "#ff3333";
@@ -493,58 +491,49 @@ function checkDuplicates() {
 
     playFailBzzt();
 
-    statActionBtn.textContent = "Удалить";
-    statActionBtn.className = "statistic__action delete";
+    deleteBtn.classList.remove("hidden");
 
-    statActionBtn.classList.remove("hidden");
-
-    statActionBtn.onclick = () => {
+    deleteBtn.onclick = () => {
       textareaRef.value = [...new Set(values)].join("\n");
-
       textareaRef.dispatchEvent(new Event("input"));
-
       saveToStorage();
-
       checkDuplicates();
     };
 
     return;
   }
 
-  // ✅ НЕТ ПОВТОРОВ
+  // ✅ clean
   statTitle.textContent = "Повторов нет";
   statTitle.style.color = "#00ff88";
-  statValue.textContent = total;
 
   statValue.style.color = "#00ff88";
 
   uiSuccess();
 
   isValidatedNoDuplicates = true;
-  copyBtn.disabled = false;
-  copyBtn.style.opacity = 1;
 
-  statActionBtn.textContent = "Поделиться";
-  statActionBtn.className = "statistic__action share";
-
-  statActionBtn.classList.remove("hidden");
-
-  statActionBtn.onclick = () => {
-    const name = nameInputRef.value.trim();
-    const text = textareaRef.value.trim();
-
-    const nameWithType =
-      name && selectedType ? `${name} (${selectedType})` : name;
-
-    const combined = nameWithType ? nameWithType + "\n\n" + text : text;
-
-    if (navigator.share) {
-      navigator.share({ text: combined });
-    } else {
-      navigator.clipboard.writeText(combined);
-    }
-  };
+  copyBtn.classList.remove("hidden");
+  shareBtn.classList.remove("hidden");
 }
+
+shareBtn.addEventListener("click", () => {
+  const name = nameInputRef.value.trim();
+  const text = textareaRef.value.trim();
+
+  const nameWithType =
+    name && selectedType ? `${name} (${selectedType})` : name;
+
+  const combined = nameWithType ? nameWithType + "\n\n" + text : text;
+
+  if (!combined) return;
+
+  if (navigator.share) {
+    navigator.share({ text: combined });
+  } else {
+    navigator.clipboard.writeText(combined);
+  }
+});
 
 /* ===================== */
 /* Отслеживание изменений textarea */
@@ -553,13 +542,13 @@ function checkDuplicates() {
 textareaRef.addEventListener("input", () => {
   if (isValidatedNoDuplicates) {
     statTitle.textContent = "";
-    statActionBtn.classList.add("hidden");
 
     isValidatedNoDuplicates = false;
-
-    copyBtn.disabled = true;
-    copyBtn.style.opacity = 0.5;
   }
+
+  copyBtn.classList.add("hidden");
+  shareBtn.classList.add("hidden");
+  deleteBtn.classList.add("hidden");
 
   saveToStorageDebounced();
 });

@@ -58,7 +58,21 @@
             <div class="statistic__value js-statistic__value">0</div>
           </div>
 
-          <button id="statActionBtn" class="statistic__action hidden"></button>
+          <div class="statistic__actions">
+            <button id="copyBtn" class="icon-btn copy hidden">
+              <svg class="icon">
+                <use href="./img/sprite.svg#icon-copy"></use>
+              </svg>
+            </button>
+
+            <button id="shareBtn" class="icon-btn hidden">
+              <img src="./img/share.svg" alt="share" />
+            </button>
+
+            <button id="deleteBtn" class="statistic__action delete hidden">
+              Удалить
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -66,9 +80,7 @@
     <div class="bottom-bar">
       <button id="clearBtn" class="bottom-btn clean-btn">ОЧИСТИТЬ</button>
       <button id="checkBtn" class="bottom-btn check-btn">ПРОВЕРИТЬ</button>
-      <button id="copyBtn" class="bottom-btn copy-btn">КОПИРОВАТЬ</button>
-
-      <button id="scanner-btn" class="scan-btn">СКАНИРОВАТЬ</button>
+      <button id="scanner-btn" class="bottom-btn scan-btn">СКАНИРОВАТЬ</button>
     </div>
 
     <!-- modals -->
