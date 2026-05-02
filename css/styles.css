@@ -147,7 +147,7 @@ textarea {
 
 .check-btn {
   background: hsla(200, 100%, 50%, 0.03);
-  border: 2px solid hsla(200, 100%, 50%, 0.05);
+  border: 2px solid hsla(200, 100%, 50%, 0.1);
 }
 
 .scan-btn {
