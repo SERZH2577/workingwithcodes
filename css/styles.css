@@ -141,13 +141,13 @@ textarea {
 }
 
 .clean-btn {
-  background: hsla(0, 100%, 50%, 0.15);
+  background: #1a1a1a;
   border: 2px solid hsla(0, 100%, 50%, 0.15);
 }
 
 .check-btn {
-  background: hsla(200, 100%, 50%, 0.1);
-  border: 2px solid hsla(200, 100%, 50%, 0.1);
+  background: hsla(200, 100%, 50%, 0.03);
+  border: 2px solid hsla(200, 100%, 50%, 0.05);
 }
 
 .scan-btn {
