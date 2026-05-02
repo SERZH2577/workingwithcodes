@@ -147,12 +147,12 @@ textarea {
 
 .check-btn {
   background: hsla(200, 100%, 50%, 0.03);
-  border: 2px solid hsla(200, 100%, 50%, 0.1);
+  border: 2px solid hsla(200, 100%, 50%, 0.2);
 }
 
 .scan-btn {
-  background: hsla(134, 100%, 50%, 0.1);
-  border: 2px solid hsla(134, 100%, 50%, 0.1);
+  background: hsla(134, 100%, 50%, 0.03);
+  border: 2px solid hsla(134, 100%, 50%, 0.2);
 }
 
 /* .copy-btn {
