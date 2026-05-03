@@ -131,20 +131,20 @@ textarea {
 .bottom-bar-btn {
   background: none;
   border: none;
-  padding: 10px;
+  padding: 5px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.bottom-bar-btn:not(:first-child) {
+/* .bottom-bar-btn:not(:first-child) {
   margin-left: 20px;
-}
+} */
 
 .icon-bottom-bar {
-  width: 60px;
-  height: 60px;
+  width: 58px;
+  height: 58px;
 }
 
 .icon-data-cleaning {
@@ -162,8 +162,8 @@ textarea {
 .icon-menu {
   fill: hsla(52, 100%, 50%, 0.25);
 
-  width: 60px;
-  height: 55px;
+  width: 58px;
+  height: 53px;
 }
 
 .icon-close-menu {
