@@ -73,18 +73,46 @@
               <img src="./img/delete.svg" alt="share" />
             </button>
 
-            <button id="" class="statistic__action delete hidden">
+            <!-- <button id="" class="statistic__action delete hidden">
               Удалить
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
     </div>
 
+    <!-- === BOTTOM BAR === -->
+
     <div class="bottom-bar">
-      <button id="clearBtn" class="bottom-btn clean-btn">ОЧИСТИТЬ</button>
-      <button id="checkBtn" class="bottom-btn check-btn">ПРОВЕРИТЬ</button>
-      <button id="scanner-btn" class="bottom-btn scan-btn">СКАНИРОВАТЬ</button>
+      <button id="clearBtn" class="bottom-bar-btn">
+        <svg class="icon-bottom-bar icon-data-cleaning">
+          <use href="./img/sprite.svg#icon-data-cleaning"></use>
+        </svg>
+      </button>
+
+      <button id="checkBtn" class="bottom-bar-btn">
+        <svg class="icon-bottom-bar icon-search-for-duplicates">
+          <use href="./img/sprite.svg#icon-search-for-duplicates"></use>
+        </svg>
+      </button>
+
+      <button id="scanner-btn" class="bottom-bar-btn">
+        <svg class="icon-bottom-bar icon-scan">
+          <use href="./img/sprite.svg#icon-scan"></use>
+        </svg>
+      </button>
+
+      <button id="menu-btn" class="bottom-bar-btn">
+        <svg class="icon-bottom-bar icon-menu">
+          <use href="./img/sprite.svg#icon-menu"></use>
+        </svg>
+      </button>
+
+      <button id="close-menu-btn" class="bottom-bar-btn hidden">
+        <svg class="icon-bottom-bar icon-close-menu">
+          <use href="./img/sprite.svg#icon-close-menu"></use>
+        </svg>
+      </button>
     </div>
 
     <!-- modals -->
@@ -108,6 +136,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
-    <script src="./js/index.js"></script>
+    <script type="module" src="./js/index.js"></script>
   </body>
 </html>

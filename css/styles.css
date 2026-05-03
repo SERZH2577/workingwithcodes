@@ -110,6 +110,9 @@ textarea {
 
 .bottom-bar {
   position: fixed;
+
+  justify-content: space-between;
+
   bottom: 0;
   left: 0;
   right: 0;
@@ -125,7 +128,52 @@ textarea {
   border-top: 1px solid #222;
 }
 
-.bottom-btn {
+.bottom-bar-btn {
+  background: none;
+  border: none;
+  padding: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom-bar-btn:not(:first-child) {
+  margin-left: 20px;
+}
+
+.icon-bottom-bar {
+  width: 60px;
+  height: 60px;
+}
+
+.icon-data-cleaning {
+  fill: hsla(0, 100%, 55%, 0.25);
+}
+
+.icon-search-for-duplicates {
+  fill: hsla(200, 100%, 50%, 0.2);
+}
+
+.icon-scan {
+  fill: hsla(133, 100%, 33%, 0.3);
+}
+
+.icon-menu {
+  fill: hsla(52, 100%, 50%, 0.25);
+
+  width: 60px;
+  height: 55px;
+}
+
+.icon-close-menu {
+  fill: hsla(52, 100%, 50%, 0.25);
+
+  width: 55px;
+  height: 55px;
+}
+
+/* .bottom-btn {
   flex: 1;
   height: 50px;
 
@@ -135,9 +183,9 @@ textarea {
   background: #1f1f1f;
   color: #fff;
   font-size: 12px;
-}
+} */
 
-.clean-btn {
+/* .clean-btn {
   background: hsla(0, 100%, 55%, 0.03);
   border: 2px solid hsla(0, 100%, 55%, 0.25);
 }
@@ -150,7 +198,7 @@ textarea {
 .scan-btn {
   background: hsla(133, 100%, 33%, 0.03);
   border: 2px solid hsla(133, 100%, 33%, 0.3);
-}
+} */
 
 /* .copy-btn {
   background: #1f1f1f;
