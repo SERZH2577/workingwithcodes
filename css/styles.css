@@ -134,6 +134,7 @@ textarea {
   padding: 5px;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -143,34 +144,43 @@ textarea {
 } */
 
 .icon-bottom-bar {
-  width: 58px;
-  height: 58px;
+  width: 28px;
+  height: 28px;
 }
 
 .icon-data-cleaning {
+  margin-bottom: 5px;
   fill: hsla(0, 100%, 55%, 0.25);
 }
 
 .icon-search-for-duplicates {
+  margin-bottom: 5px;
+
   fill: hsla(200, 100%, 50%, 0.2);
 }
 
 .icon-scan {
+  margin-bottom: 5px;
+
   fill: hsla(133, 100%, 33%, 0.3);
 }
 
 .icon-menu {
-  fill: hsla(52, 100%, 50%, 0.25);
+  fill: #333333;
 
-  width: 58px;
-  height: 53px;
+  width: 43px;
+  height: 40px;
 }
 
 .icon-close-menu {
-  fill: hsla(52, 100%, 50%, 0.25);
+  fill: #333333;
 
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
+}
+
+.bottom-bar-text {
+  color: #ffffff;
 }
 
 /* .bottom-btn {
