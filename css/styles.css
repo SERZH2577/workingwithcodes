@@ -113,7 +113,7 @@ textarea {
 
   justify-content: space-between;
 
-  bottom: 0;
+  bottom: 10px;
   left: 0;
   right: 0;
 
@@ -121,16 +121,21 @@ textarea {
   flex-wrap: wrap;
   gap: 8px;
 
-  padding: 10px;
+  margin: 10px;
+
+  padding: 10px 30px;
   padding-bottom: calc(10px + env(safe-area-inset-bottom));
 
   background: #111;
-  border-top: 1px solid #222;
+  border: 1px solid #222;
+  border-radius: 50px;
 }
 
 .bottom-bar-btn {
   background: none;
   border: none;
+  /* border: 1px solid #fff; */
+
   padding: 5px;
 
   display: flex;
@@ -144,39 +149,47 @@ textarea {
 } */
 
 .icon-bottom-bar {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 }
 
 .icon-data-cleaning {
+  /* border: 1px solid #fff; */
   margin-bottom: 5px;
-  fill: hsla(0, 100%, 55%, 0.25);
+  /* fill: hsla(0, 100%, 55%, 0.25); */
+  fill: #777777;
 }
 
 .icon-search-for-duplicates {
+  /* border: 1px solid #fff; */
+
   margin-bottom: 5px;
 
-  fill: hsla(200, 100%, 50%, 0.2);
+  /* fill: hsla(200, 100%, 50%, 0.2); */
+  fill: #777777;
 }
 
 .icon-scan {
+  /* border: 1px solid #fff; */
+
   margin-bottom: 5px;
 
-  fill: hsla(133, 100%, 33%, 0.3);
+  /* fill: hsla(133, 100%, 33%, 0.3); */
+  fill: #777777;
 }
 
 .icon-menu {
-  fill: #333333;
+  fill: #777777;
 
-  width: 43px;
-  height: 40px;
+  width: 33px;
+  height: 30px;
 }
 
 .icon-close-menu {
-  fill: #333333;
+  fill: #777777;
 
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 .bottom-bar-text {

@@ -494,7 +494,7 @@ function stopScanner() {
     liveBox = null;
   }
 
-  scannerBtn.style.display = "block";
+  scannerBtn.style.display = "flex";
 }
 
 /* ===================== */
