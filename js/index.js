@@ -19,6 +19,11 @@ const okBtn = document.getElementById("okBtn");
 const typeBtn = document.getElementById("typeBtn");
 const typeMenu = document.getElementById("typeMenu");
 
+const menuBtn = document.getElementById("menu-btn");
+const closeMenuBtn = document.getElementById("close-menu-btn");
+const menuPanel = document.getElementById("menuPanel");
+const menuBackdrop = document.getElementById("menuBackdrop");
+
 const statTitle = document.querySelector(".js-statistic__title");
 const statValue = document.querySelector(".js-statistic__value");
 
@@ -107,7 +112,43 @@ document.body.addEventListener(
 );
 
 /* ===================== */
-/* CLEAR */
+/*  MENU BUTTON CONTROL  */
+/* ===================== */
+
+/* ===================== */
+/*   MENU MODAL CONTROL  */
+/* ===================== */
+
+menuBtn.addEventListener("click", openMenu);
+closeMenuBtn.addEventListener("click", closeMenu);
+menuBackdrop.addEventListener("click", closeMenu);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeMenu();
+});
+
+function openMenu() {
+  menuBtn.classList.add("hidden");
+  closeMenuBtn.classList.remove("hidden");
+
+  menuPanel.classList.add("show");
+  menuBackdrop.classList.add("show");
+
+  document.body.classList.add("menu-open");
+}
+
+function closeMenu() {
+  closeMenuBtn.classList.add("hidden");
+  menuBtn.classList.remove("hidden");
+
+  menuPanel.classList.remove("show");
+  menuBackdrop.classList.remove("show");
+
+  document.body.classList.remove("menu-open");
+}
+
+/* ===================== */
+/*         CLEAR         */
 /* ===================== */
 
 clearBtn.addEventListener("click", () => {

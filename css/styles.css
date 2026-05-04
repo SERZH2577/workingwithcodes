@@ -1,3 +1,7 @@
+:root {
+  --bottom-bar-height: 90px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -7,6 +11,13 @@ body {
   font-family: sans-serif;
   background: #0f0f0f;
   color: #fff;
+}
+
+body.menu-open #scanner-btn,
+body.menu-open #clearBtn,
+body.menu-open #checkBtn {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 /* container */
@@ -52,7 +63,7 @@ textarea {
   inset: 0;
   display: none;
   background: black;
-  z-index: 999;
+  z-index: 2500;
 }
 
 #qr-reader video {
@@ -105,7 +116,7 @@ textarea {
   padding: 14px 20px;
   border: 2px solid hsla(0, 100%, 55%, 0.25);
   border-radius: 12px;
-  z-index: 2000;
+  z-index: 3000;
 }
 
 .bottom-bar {
@@ -129,6 +140,8 @@ textarea {
   background: #1a1a1a;
   border: 1px solid #333333;
   border-radius: 50px;
+
+  z-index: 2000;
 }
 
 .bottom-bar-btn {
@@ -192,7 +205,7 @@ textarea {
 .icon-close-menu {
   fill: #777777;
 
-  width: 28px;
+  width: 31px;
   height: 28px;
 }
 
@@ -561,4 +574,62 @@ textarea {
 
   width: 60px;
   height: 60px;
+}
+
+/* MODAL MENU  */
+
+.menu-panel {
+  position: fixed;
+
+  right: 15px;
+  bottom: calc(var(--bottom-bar-height) + 10px);
+
+  width: 260px;
+  max-width: 80%;
+
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 16px;
+
+  /* 👉 скрыто (уехала вправо) */
+  transform: translateX(120%);
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+
+  z-index: 2000;
+}
+
+/* 👉 открыто */
+.menu-panel.show {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-panel__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: 0.3s;
+  z-index: 1500;
+}
+
+.menu-backdrop.show {
+  opacity: 1;
+  pointer-events: auto;
 }
