@@ -81,7 +81,7 @@ function loadFromStorage() {
 
     // восстановление чекбоксов
     if (selectedType) {
-      checkboxes.forEach((cb) => {
+      allCheckboxes.forEach((cb) => {
         cb.checked = cb.value === selectedType;
       });
     }
@@ -558,33 +558,56 @@ typeBtn.addEventListener("click", () => {
   typeMenu.classList.toggle("hidden");
 });
 
-const checkboxes = typeMenu.querySelectorAll('input[type="checkbox"]');
+const allCheckboxes = document.querySelectorAll(
+  '#typeMenu input[type="checkbox"], #panelTypeMenu input[type="checkbox"]',
+);
 
-checkboxes.forEach((checkbox) => {
+function setType(value) {
+  selectedType = value;
+
+  allCheckboxes.forEach((cb) => {
+    cb.checked = cb.value === value;
+  });
+
+  updateTypeButton();
+  saveToStorageDebounced();
+}
+
+allCheckboxes.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
     if (checkbox.checked) {
-      // выключаем остальные
-      checkboxes.forEach((cb) => {
-        if (cb !== checkbox) cb.checked = false;
-      });
-
-      selectedType = checkbox.value;
+      setType(checkbox.value);
     } else {
-      // если сняли галочку
-      selectedType = null;
-
-      typeBtn.textContent = "Категория";
-      typeBtn.style.color = "";
-      typeBtn.style.borderColor = "";
+      setType(null);
     }
-    updateTypeButton();
-    saveToStorageDebounced();
-
-    setTimeout(() => {
-      typeMenu.classList.add("hidden");
-    }, 0);
   });
 });
+
+// checkboxes.forEach((checkbox) => {
+//   checkbox.addEventListener("change", () => {
+//     if (checkbox.checked) {
+//       // выключаем остальные
+//       checkboxes.forEach((cb) => {
+//         if (cb !== checkbox) cb.checked = false;
+//       });
+
+//       selectedType = checkbox.value;
+//     } else {
+//       // если сняли галочку
+//       selectedType = null;
+
+//       typeBtn.textContent = "Категория";
+//       typeBtn.style.color = "";
+//       typeBtn.style.borderColor = "";
+//     }
+//     updateTypeButton();
+//     saveToStorageDebounced();
+
+//     setTimeout(() => {
+//       typeMenu.classList.add("hidden");
+//     }, 0);
+//   });
+// });
 
 document.addEventListener("click", (e) => {
   if (!typeMenu.contains(e.target) && e.target !== typeBtn) {

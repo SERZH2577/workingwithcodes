@@ -60,18 +60,26 @@
 
           <div class="statistic__actions">
             <button id="shareBtn" class="icon-btn hidden">
-              <img src="./img/share.svg" alt="share" />
+              <svg class="icon icon-share">
+                <use href="./img/sprite.svg#icon-share-7"></use>
+              </svg>
             </button>
 
             <button id="copyBtn" class="icon-btn copy hidden">
-              <svg class="icon">
-                <use href="./img/sprite.svg#icon-copy"></use>
+              <svg class="icon icon-copy">
+                <use href="./img/sprite.svg#icon-copy-7"></use>
               </svg>
             </button>
 
             <button id="deleteBtn" class="icon-btn hidden">
-              <img src="./img/delete.svg" alt="share" />
+              <svg class="icon-removing-duplicates">
+                <use href="./img/sprite.svg#icon-removing-duplicates-7"></use>
+              </svg>
             </button>
+
+            <!-- <button id="deleteBtn" class="icon-btn hidden">
+              <img src="./img/delete.svg" alt="share" />
+            </button> -->
 
             <!-- <button id="" class="statistic__action delete hidden">
               Удалить
@@ -140,7 +148,7 @@
 
     <div id="menuPanel" class="menu-panel">
       <div class="menu-panel__content">
-        <!-- <div id="typeMenu" class="type-menu">
+        <div class="type-menu" id="panelTypeMenu">
           <label class="type-item type-option">
             <input type="checkbox" value="короба" />
             <span>короба</span>
@@ -150,9 +158,7 @@
             <input type="checkbox" value="пары" />
             <span>пары</span>
           </label>
-        </div> -->
-        <button class="btn">Действие 1</button>
-        <button class="btn">Действие 2</button>
+        </div>
       </div>
     </div>
 
