@@ -23,6 +23,7 @@ const menuBtn = document.getElementById("menu-btn");
 const closeMenuBtn = document.getElementById("close-menu-btn");
 const menuPanel = document.getElementById("menuPanel");
 const menuBackdrop = document.getElementById("menuBackdrop");
+const focusNameBtn = document.getElementById("focusNameBtn");
 
 const statTitle = document.querySelector(".js-statistic__title");
 const statValue = document.querySelector(".js-statistic__value");
@@ -112,8 +113,36 @@ document.body.addEventListener(
 );
 
 /* ===================== */
-/*  MENU BUTTON CONTROL  */
+/*  TEXT FORMATION (COPY / SHARE)  */
 /* ===================== */
+
+function buildExportText() {
+  const name = nameInputRef.value.trim();
+  const text = textareaRef.value.trim();
+
+  if (!name && !text) return "";
+
+  const values = text.split(/\s+/).filter(Boolean);
+
+  const total = values.length;
+
+  const nameWithType =
+    name && selectedType ? `${name} (${selectedType})` : name;
+
+  let result = "";
+
+  if (nameWithType) {
+    result += nameWithType + "\n";
+  }
+
+  if (total > 0) {
+    result += `Всего: ${total} \n\n`;
+  }
+
+  result += values.join("\n");
+
+  return result.trim();
+}
 
 /* ===================== */
 /*   MENU MODAL CONTROL  */
@@ -146,6 +175,15 @@ function closeMenu() {
 
   document.body.classList.remove("menu-open");
 }
+
+focusNameBtn.addEventListener("click", () => {
+  closeMenu();
+
+  setTimeout(() => {
+    nameInputRef.focus();
+    nameInputRef.select();
+  }, 150);
+});
 
 /* ===================== */
 /*         CLEAR         */
@@ -195,15 +233,8 @@ cancelBtn.addEventListener("click", () => {
 /* ===================== */
 
 copyBtn.addEventListener("click", () => {
-  const name = nameInputRef.value.trim();
-  const text = textareaRef.value.trim();
-
-  if (!name && !text) return;
-
-  const nameWithType =
-    name && selectedType ? `${name} (${selectedType})` : name;
-
-  const combined = nameWithType ? nameWithType + "\n\n" + text : text;
+  const combined = buildExportText();
+  if (!combined) return;
 
   navigator.clipboard.writeText(combined).then(() => {
     copyModal.classList.add("show");
@@ -292,14 +323,7 @@ function checkDuplicates() {
 }
 
 shareBtn.addEventListener("click", () => {
-  const name = nameInputRef.value.trim();
-  const text = textareaRef.value.trim();
-
-  const nameWithType =
-    name && selectedType ? `${name} (${selectedType})` : name;
-
-  const combined = nameWithType ? nameWithType + "\n\n" + text : text;
-
+  const combined = buildExportText();
   if (!combined) return;
 
   if (navigator.share) {
@@ -582,32 +606,6 @@ allCheckboxes.forEach((checkbox) => {
     }
   });
 });
-
-// checkboxes.forEach((checkbox) => {
-//   checkbox.addEventListener("change", () => {
-//     if (checkbox.checked) {
-//       // выключаем остальные
-//       checkboxes.forEach((cb) => {
-//         if (cb !== checkbox) cb.checked = false;
-//       });
-
-//       selectedType = checkbox.value;
-//     } else {
-//       // если сняли галочку
-//       selectedType = null;
-
-//       typeBtn.textContent = "Категория";
-//       typeBtn.style.color = "";
-//       typeBtn.style.borderColor = "";
-//     }
-//     updateTypeButton();
-//     saveToStorageDebounced();
-
-//     setTimeout(() => {
-//       typeMenu.classList.add("hidden");
-//     }, 0);
-//   });
-// });
 
 document.addEventListener("click", (e) => {
   if (!typeMenu.contains(e.target) && e.target !== typeBtn) {
