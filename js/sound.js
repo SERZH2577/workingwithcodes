@@ -39,44 +39,92 @@ export function playCopyTick() {
   osc.stop(now + 0.06);
 }
 
+// export function playSweepSound() {
+//   const ctx = getAudioCtx();
+//   const now = ctx.currentTime;
+
+//   const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.28, ctx.sampleRate);
+//   const data = buffer.getChannelData(0);
+
+//   let last = 0;
+//   for (let i = 0; i < data.length; i++) {
+//     const w = Math.random() * 2 - 1;
+//     last = last * 0.95 + w * 0.05;
+//     data[i] = last * 0.6;
+//   }
+
+//   const noise = ctx.createBufferSource();
+//   noise.buffer = buffer;
+
+//   const filter = ctx.createBiquadFilter();
+//   filter.type = "bandpass";
+//   filter.frequency.setValueAtTime(150, now);
+//   filter.frequency.exponentialRampToValueAtTime(3000, now + 0.25);
+//   filter.Q.value = 1;
+
+//   const gain = ctx.createGain();
+//   gain.gain.setValueAtTime(0.001, now);
+//   gain.gain.linearRampToValueAtTime(0.7, now + 0.05);
+//   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+//   const master = ctx.createGain();
+//   master.gain.value = 3;
+
+//   noise.connect(filter);
+//   filter.connect(gain);
+//   gain.connect(master);
+//   master.connect(ctx.destination);
+
+//   noise.start(now);
+//   noise.stop(now + 0.28);
+// }
+
 export function playSweepSound() {
   const ctx = getAudioCtx();
   const now = ctx.currentTime;
 
-  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.28, ctx.sampleRate);
+  // шум
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.35, ctx.sampleRate);
   const data = buffer.getChannelData(0);
 
   let last = 0;
+
   for (let i = 0; i < data.length; i++) {
-    const w = Math.random() * 2 - 1;
-    last = last * 0.95 + w * 0.05;
-    data[i] = last * 0.6;
+    const white = Math.random() * 2 - 1;
+
+    // мягкий воздушный шум
+    last = last * 0.96 + white * 0.04;
+
+    data[i] = last * 0.7;
   }
 
   const noise = ctx.createBufferSource();
   noise.buffer = buffer;
 
+  // воздушный фильтр
   const filter = ctx.createBiquadFilter();
+
   filter.type = "bandpass";
-  filter.frequency.setValueAtTime(150, now);
-  filter.frequency.exponentialRampToValueAtTime(3000, now + 0.25);
-  filter.Q.value = 1;
+  filter.frequency.value = 1200;
+  filter.Q.value = 0.7;
 
+  // громкость
   const gain = ctx.createGain();
-  gain.gain.setValueAtTime(0.001, now);
-  gain.gain.linearRampToValueAtTime(0.7, now + 0.05);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
-  const master = ctx.createGain();
-  master.gain.value = 3;
+  gain.gain.setValueAtTime(0.0001, now);
+
+  // мягкий подъем
+  gain.gain.linearRampToValueAtTime(0.7, now + 0.08);
+
+  // плавный спад
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
 
   noise.connect(filter);
   filter.connect(gain);
-  gain.connect(master);
-  master.connect(ctx.destination);
+  gain.connect(ctx.destination);
 
   noise.start(now);
-  noise.stop(now + 0.28);
+  noise.stop(now + 0.35);
 }
 
 export function playBeep(type = "ok") {
@@ -177,6 +225,8 @@ export function playClick() {
   osc2.stop(now + 0.08);
 }
 
+// звук ПОВТОРОВ НЕТ
+
 export function uiSuccess() {
   const ctx = getAudioCtx();
   const now = ctx.currentTime;
@@ -211,6 +261,8 @@ export function uiSuccess() {
   osc2.start(now + 0.1);
   osc2.stop(now + 0.3);
 }
+
+// звук ЕСТЬ ПОВТОРЫ
 
 export function playFailBzzt() {
   const ctx = getAudioCtx();
@@ -264,12 +316,109 @@ export function playFailBzzt() {
   noise.stop(now + 0.06);
 }
 
+// звук ЧЕКБОКСЫ
+
+export function playLowThudTick() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = "sine";
+
+  osc.frequency.setValueAtTime(90, now);
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.04);
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+
+  filter.frequency.setValueAtTime(300, now);
+  filter.Q.value = 1;
+
+  gain.gain.setValueAtTime(0.5, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.08);
+}
+
+export function playPlasticClick() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  // короткий импульс
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.015, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < data.length; i++) {
+    data[i] = (-0.0038191731876087817 * 2 - 1) * (1 - i / data.length);
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 1200;
+
+  const gain = ctx.createGain();
+
+  gain.gain.setValueAtTime(0.25, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+
+  noise.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  noise.start(now);
+  noise.stop(now + 0.02);
+}
+
+export function playClick2() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
+
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < data.length; i++) {
+    data[i] = (1 - i / data.length) * 0.5;
+  }
+
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(3000, now);
+  filter.frequency.exponentialRampToValueAtTime(400, now + 0.5);
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+  src.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+
+  src.start(now);
+  src.stop(now + 0.5);
+}
+
 export const sound = {
   playCopyTick,
   playSweepSound,
   playBeep,
   playBroom,
   playClick,
+  playClick2,
   uiSuccess,
   playFailBzzt,
+  playLowThudTick,
+  playPlasticClick,
 };

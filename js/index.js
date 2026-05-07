@@ -197,31 +197,37 @@ clearBtn.addEventListener("click", () => {
 confirmBtn.addEventListener("click", () => {
   sound.playSweepSound();
 
+  // очищаем поля
   textareaRef.value = "";
   nameInputRef.value = "";
 
   scannedCodes.clear();
+
   clearModal.classList.remove("show");
 
   statTitle.textContent = "";
   statValue.textContent = 0;
 
+  statTitle.style.color = "";
+  statValue.style.color = "#00ff88";
+
   isValidatedNoDuplicates = false;
+
   copyBtn.classList.add("hidden");
   shareBtn.classList.add("hidden");
   deleteBtn.classList.add("hidden");
 
-  statValue.style.color = "#00ff88";
-
-  // ✔️ СБРОС ЧЕКБОКСОВ
-  checkboxes.forEach((cb) => {
+  // сброс категории
+  allCheckboxes.forEach((cb) => {
     cb.checked = false;
   });
 
   selectedType = null;
+
   updateTypeButton();
 
-  clearStorage();
+  clearTimeout(saveTimeout);
+  localStorage.removeItem(STORAGE_KEY);
 });
 
 cancelBtn.addEventListener("click", () => {
@@ -288,9 +294,13 @@ function checkDuplicates() {
 
   // ❌ duplicates
   if (duplicates > 0) {
-    statTitle.textContent = "Есть повторы!";
+    statTitle.innerHTML = `
+    <svg class="stat-icon stat-icon-warning">
+      <use href="./img/sprite.svg#icon-warning"></use>
+    </svg>
+    <span>Есть повторы</span>
+  `;
     statTitle.style.color = "#cc3333";
-
     statValue.textContent = duplicates;
     statValue.style.color = "#cc3333";
 
@@ -309,9 +319,13 @@ function checkDuplicates() {
   }
 
   // ✅ clean
-  statTitle.textContent = "Повторов нет";
+  statTitle.innerHTML = `
+  <svg class="stat-icon stat-icon-success">
+    <use href="./img/sprite.svg#icon-success"></use>
+  </svg>
+  <span>Повторов нет</span>
+`;
   statTitle.style.color = "#00ff88";
-
   statValue.style.color = "#00ff88";
 
   sound.uiSuccess();
@@ -599,6 +613,8 @@ function setType(value) {
 
 allCheckboxes.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
+    sound.playClick2();
+
     if (checkbox.checked) {
       setType(checkbox.value);
     } else {
