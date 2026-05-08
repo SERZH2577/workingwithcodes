@@ -705,7 +705,7 @@ textarea {
 
 /* КНОПКИ управления курсором */
 
-.cursor-toolbar {
+/* .cursor-toolbar {
   position: fixed;
 
   left: auto;
@@ -748,4 +748,4 @@ textarea {
 
 .hidden {
   display: none;
-}
+} */

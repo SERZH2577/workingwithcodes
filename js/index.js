@@ -655,54 +655,54 @@ loadFromStorage();
 /*  УПРАВЛЕНИЕ КУРСОРОМ  */
 /* ===================== */
 
-[cursorLeftBtn, cursorRightBtn].forEach((btn) => {
-  btn.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-  });
-});
+// [cursorLeftBtn, cursorRightBtn].forEach((btn) => {
+//   btn.addEventListener("pointerdown", (e) => {
+//     e.preventDefault();
+//   });
+// });
 
-function updateToolbarPosition() {
-  if (!window.visualViewport) return;
+// function updateToolbarPosition() {
+//   if (!window.visualViewport) return;
 
-  const viewport = window.visualViewport;
-  const keyboardHeight = window.innerHeight - viewport.height;
+//   const viewport = window.visualViewport;
+//   const keyboardHeight = window.innerHeight - viewport.height;
 
-  cursorToolbar.style.bottom = `${keyboardHeight + 12}px`;
-}
+//   cursorToolbar.style.bottom = `${keyboardHeight + 12}px`;
+// }
 
-if (window.visualViewport) {
-  visualViewport.addEventListener("resize", updateToolbarPosition);
+// if (window.visualViewport) {
+//   visualViewport.addEventListener("resize", updateToolbarPosition);
 
-  visualViewport.addEventListener("scroll", updateToolbarPosition);
-}
+//   visualViewport.addEventListener("scroll", updateToolbarPosition);
+// }
 
-nameInputRef.addEventListener("focus", () => {
-  cursorToolbar.classList.remove("hidden");
+// nameInputRef.addEventListener("focus", () => {
+//   cursorToolbar.classList.remove("hidden");
 
-  updateToolbarPosition();
-});
+//   updateToolbarPosition();
+// });
 
-nameInputRef.addEventListener("blur", () => {
-  setTimeout(() => {
-    cursorToolbar.classList.add("hidden");
-  }, 100);
-});
+// nameInputRef.addEventListener("blur", () => {
+//   setTimeout(() => {
+//     cursorToolbar.classList.add("hidden");
+//   }, 100);
+// });
 
-cursorLeftBtn.addEventListener("click", () => {
-  const pos = nameInputRef.selectionStart;
+// cursorLeftBtn.addEventListener("click", () => {
+//   const pos = nameInputRef.selectionStart;
 
-  nameInputRef.setSelectionRange(Math.max(0, pos - 1), Math.max(0, pos - 1));
+//   nameInputRef.setSelectionRange(Math.max(0, pos - 1), Math.max(0, pos - 1));
 
-  nameInputRef.focus();
-});
+//   nameInputRef.focus();
+// });
 
-cursorRightBtn.addEventListener("click", () => {
-  const pos = nameInputRef.selectionStart;
+// cursorRightBtn.addEventListener("click", () => {
+//   const pos = nameInputRef.selectionStart;
 
-  nameInputRef.setSelectionRange(pos + 1, pos + 1);
+//   nameInputRef.setSelectionRange(pos + 1, pos + 1);
 
-  nameInputRef.focus();
-});
+//   nameInputRef.focus();
+// });
 
 /* ===================== */
 
