@@ -652,11 +652,28 @@ function updateTypeButton() {
 loadFromStorage();
 
 /* ===================== */
-/* УПРАВЛЕНИЕ КУРСОРОМ */
+/*  УПРАВЛЕНИЕ КУРСОРОМ  */
 /* ===================== */
+
+function updateToolbarPosition() {
+  if (!window.visualViewport) return;
+
+  const viewport = window.visualViewport;
+  const keyboardHeight = window.innerHeight - viewport.height;
+
+  cursorToolbar.style.bottom = `${keyboardHeight + 12}px`;
+}
+
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", updateToolbarPosition);
+
+  visualViewport.addEventListener("scroll", updateToolbarPosition);
+}
 
 nameInputRef.addEventListener("focus", () => {
   cursorToolbar.classList.remove("hidden");
+
+  updateToolbarPosition();
 });
 
 nameInputRef.addEventListener("blur", () => {
