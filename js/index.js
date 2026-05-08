@@ -655,6 +655,16 @@ loadFromStorage();
 /*  УПРАВЛЕНИЕ КУРСОРОМ  */
 /* ===================== */
 
+[cursorLeftBtn, cursorRightBtn].forEach((btn) => {
+  btn.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+  });
+
+  btn.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+  });
+});
+
 function updateToolbarPosition() {
   if (!window.visualViewport) return;
 
