@@ -656,11 +656,7 @@ loadFromStorage();
 /* ===================== */
 
 [cursorLeftBtn, cursorRightBtn].forEach((btn) => {
-  btn.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-  });
-
-  btn.addEventListener("touchstart", (e) => {
+  btn.addEventListener("pointerdown", (e) => {
     e.preventDefault();
   });
 });
@@ -695,19 +691,17 @@ nameInputRef.addEventListener("blur", () => {
 cursorLeftBtn.addEventListener("click", () => {
   const pos = nameInputRef.selectionStart;
 
-  const newPos = Math.max(0, pos - 1);
+  nameInputRef.setSelectionRange(Math.max(0, pos - 1), Math.max(0, pos - 1));
 
   nameInputRef.focus();
-  nameInputRef.setSelectionRange(newPos, newPos);
 });
 
 cursorRightBtn.addEventListener("click", () => {
   const pos = nameInputRef.selectionStart;
 
-  const newPos = Math.min(nameInputRef.value.length, pos + 1);
+  nameInputRef.setSelectionRange(pos + 1, pos + 1);
 
   nameInputRef.focus();
-  nameInputRef.setSelectionRange(newPos, newPos);
 });
 
 /* ===================== */
