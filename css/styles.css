@@ -702,3 +702,37 @@ textarea {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* КНОПКИ управления курсором */
+
+.cursor-toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(90px + env(safe-area-inset-bottom));
+
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  padding: 10px;
+
+  z-index: 5000;
+}
+
+.cursor-btn {
+  width: 64px;
+  height: 44px;
+
+  border: 1px solid #333;
+  border-radius: 14px;
+
+  background: #1a1a1a;
+  color: #00ff88;
+
+  font-size: 22px;
+}
+
+.hidden {
+  display: none;
+}

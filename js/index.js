@@ -32,6 +32,10 @@ const copyBtn = document.getElementById("copyBtn");
 const shareBtn = document.getElementById("shareBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 
+const cursorToolbar = document.getElementById("cursorToolbar");
+const cursorLeftBtn = document.getElementById("cursorLeftBtn");
+const cursorRightBtn = document.getElementById("cursorRightBtn");
+
 let codeReader;
 let currentStream = null;
 let scannedCodes = new Set();
@@ -181,7 +185,10 @@ focusNameBtn.addEventListener("click", () => {
 
   setTimeout(() => {
     nameInputRef.focus();
-    nameInputRef.select();
+
+    const len = nameInputRef.value.length;
+
+    nameInputRef.setSelectionRange(len, len);
   }, 150);
 });
 
@@ -641,5 +648,41 @@ function updateTypeButton() {
   typeBtn.style.color = "#00ff88";
   typeBtn.style.borderColor = "#00ff88";
 }
+
+loadFromStorage();
+
+/* ===================== */
+/* УПРАВЛЕНИЕ КУРСОРОМ */
+/* ===================== */
+
+nameInputRef.addEventListener("focus", () => {
+  cursorToolbar.classList.remove("hidden");
+});
+
+nameInputRef.addEventListener("blur", () => {
+  setTimeout(() => {
+    cursorToolbar.classList.add("hidden");
+  }, 100);
+});
+
+cursorLeftBtn.addEventListener("click", () => {
+  const pos = nameInputRef.selectionStart;
+
+  const newPos = Math.max(0, pos - 1);
+
+  nameInputRef.focus();
+  nameInputRef.setSelectionRange(newPos, newPos);
+});
+
+cursorRightBtn.addEventListener("click", () => {
+  const pos = nameInputRef.selectionStart;
+
+  const newPos = Math.min(nameInputRef.value.length, pos + 1);
+
+  nameInputRef.focus();
+  nameInputRef.setSelectionRange(newPos, newPos);
+});
+
+/* ===================== */
 
 loadFromStorage();
