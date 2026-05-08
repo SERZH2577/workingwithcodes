@@ -716,7 +716,7 @@ textarea {
 
   z-index: 5000;
 
-  padding: 6px;
+  /* padding: 6px; */
 
   transition: bottom 0.2s ease;
 }
