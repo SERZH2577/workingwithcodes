@@ -708,13 +708,14 @@ textarea {
 .cursor-toolbar {
   position: fixed;
 
-  left: 0;
-  right: auto;
+  left: auto;
+  right: 0;
 
   width: 100%;
-  background: #0f0f0f;
+  background: #dacdc6;
 
   display: flex;
+  justify-content: flex-end;
   gap: 12px;
 
   z-index: 5000;
@@ -725,16 +726,24 @@ textarea {
 }
 
 .cursor-btn {
-  width: 70px;
-  height: 50px;
+  width: 35px;
+  height: 30px;
 
   border: 1px solid #dacdc6;
-  border-radius: 16px;
+  border-radius: 7px;
 
   background: #f0ebe7;
   color: #5b5756;
 
-  font-size: 25px;
+  font-size: 18px;
+}
+
+.cursor-btn-left {
+  padding-right: 9px;
+}
+
+.cursor-btn-right {
+  padding-left: 9px;
 }
 
 .hidden {
