@@ -370,7 +370,7 @@ textarea {
   margin-bottom: 10px;
 }
 
-.type-item input[type="checkbox"] {
+/* .type-item input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
 
@@ -419,7 +419,7 @@ textarea {
 .type-item input[type="checkbox"]:active {
   outline: none;
   box-shadow: none;
-}
+} */
 
 .hidden {
   display: none;

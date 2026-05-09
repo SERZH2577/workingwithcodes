@@ -92,7 +92,6 @@ export function playSweepSound() {
   for (let i = 0; i < data.length; i++) {
     const white = Math.random() * 2 - 1;
 
-    // мягкий воздушный шум
     last = last * 0.96 + white * 0.04;
 
     data[i] = last * 0.7;
@@ -101,23 +100,17 @@ export function playSweepSound() {
   const noise = ctx.createBufferSource();
   noise.buffer = buffer;
 
-  // воздушный фильтр
   const filter = ctx.createBiquadFilter();
 
   filter.type = "bandpass";
-  filter.frequency.value = 1200;
+  filter.frequency.value = 700;
   filter.Q.value = 0.7;
 
-  // громкость
   const gain = ctx.createGain();
 
   gain.gain.setValueAtTime(0.0001, now);
-
-  // мягкий подъем
-  gain.gain.linearRampToValueAtTime(0.7, now + 0.08);
-
-  // плавный спад
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+  gain.gain.linearRampToValueAtTime(1, now + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
 
   noise.connect(filter);
   filter.connect(gain);
