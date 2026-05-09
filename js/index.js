@@ -280,6 +280,7 @@ function checkDuplicates() {
     .filter(Boolean);
 
   const total = values.length;
+  textareaRef.value = values.join("\n");
 
   const seen = {};
   let duplicates = 0;

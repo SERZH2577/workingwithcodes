@@ -371,11 +371,52 @@ textarea {
 }
 
 .type-item input[type="checkbox"] {
-  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 18px;
+  height: 18px;
+
+  border: 2px solid #666;
+  border-radius: 4px;
+
+  background: transparent;
+
+  display: grid;
+  place-content: center;
+
+  margin: 0;
+
   outline: none;
+  box-shadow: none;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
-.type-item input[type="checkbox"]:focus {
+.type-item input[type="checkbox"]::before {
+  content: "";
+
+  width: 10px;
+  height: 10px;
+
+  transform: scale(0);
+  transition: 0.12s transform ease-in-out;
+
+  background: #00ff88;
+
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%);
+}
+
+.type-item input[type="checkbox"]:checked {
+  border-color: #00ff88;
+}
+
+.type-item input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+.type-item input[type="checkbox"]:focus,
+.type-item input[type="checkbox"]:active {
   outline: none;
   box-shadow: none;
 }
