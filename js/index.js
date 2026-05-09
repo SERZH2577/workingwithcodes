@@ -161,6 +161,8 @@ document.addEventListener("keydown", (e) => {
 });
 
 function openMenu() {
+  sound.playMenuOpen();
+
   menuBtn.classList.add("hidden");
   closeMenuBtn.classList.remove("hidden");
 
@@ -171,6 +173,8 @@ function openMenu() {
 }
 
 function closeMenu() {
+  sound.playMenuClose();
+
   closeMenuBtn.classList.add("hidden");
   menuBtn.classList.remove("hidden");
 
