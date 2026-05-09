@@ -370,6 +370,16 @@ textarea {
   margin-bottom: 10px;
 }
 
+.type-item input[type="checkbox"] {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.type-item input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .hidden {
   display: none;
 }
