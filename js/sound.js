@@ -439,7 +439,7 @@ export function playMenuOpen() {
 
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0.001, now);
-  gain.gain.linearRampToValueAtTime(70, now + 0.12);
+  gain.gain.linearRampToValueAtTime(100, now + 0.3);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
   src.connect(filter);
@@ -479,7 +479,7 @@ export function playMenuClose() {
 
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0.001, now);
-  gain.gain.linearRampToValueAtTime(1, now + 0.12);
+  gain.gain.linearRampToValueAtTime(3, now + 0.2);
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
 
   src.connect(filter);
