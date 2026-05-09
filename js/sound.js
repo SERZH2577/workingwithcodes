@@ -413,34 +413,45 @@ export function playClick2() {
 // звук открытия меню
 
 export function playMenu() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = getAudioCtx();
   const now = ctx.currentTime;
 
-  const duration = 0.9;
+  const duration = 0.55;
 
   const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+
   const data = buffer.getChannelData(0);
 
   for (let i = 0; i < data.length; i++) {
     const t = i / data.length;
+
     const noise = Math.random() * 2 - 1;
-    const envelope = Math.pow(t, 2.2);
-    data[i] = noise * envelope * 0.25;
+
+    const envelope = Math.pow(t, 1.8);
+
+    data[i] = noise * envelope * 0.18;
   }
 
   const src = ctx.createBufferSource();
   src.buffer = buffer;
 
   const filter = ctx.createBiquadFilter();
+
   filter.type = "lowpass";
-  filter.frequency.setValueAtTime(70, now);
+
+  filter.frequency.setValueAtTime(90, now);
+
   filter.frequency.exponentialRampToValueAtTime(700, now + duration);
-  filter.Q.value = 0.7;
+
+  filter.Q.value = 0.6;
 
   const gain = ctx.createGain();
+
   gain.gain.setValueAtTime(0.001, now);
-  gain.gain.linearRampToValueAtTime(100, now + 0.3);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+  gain.gain.linearRampToValueAtTime(7, now + 0.3);
+
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
 
   src.connect(filter);
   filter.connect(gain);
@@ -449,6 +460,44 @@ export function playMenu() {
   src.start(now);
   src.stop(now + duration);
 }
+
+// export function playMenu() {
+//   const ctx = getAudioCtx();
+//   const now = ctx.currentTime;
+
+//   const duration = 0.9;
+
+//   const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
+//   const data = buffer.getChannelData(0);
+
+//   for (let i = 0; i < data.length; i++) {
+//     const t = i / data.length;
+//     const noise = Math.random() * 2 - 1;
+//     const envelope = Math.pow(t, 2.2);
+//     data[i] = noise * envelope * 0.25;
+//   }
+
+//   const src = ctx.createBufferSource();
+//   src.buffer = buffer;
+
+//   const filter = ctx.createBiquadFilter();
+//   filter.type = "lowpass";
+//   filter.frequency.setValueAtTime(70, now);
+//   filter.frequency.exponentialRampToValueAtTime(700, now + duration);
+//   filter.Q.value = 0.7;
+
+//   const gain = ctx.createGain();
+//   gain.gain.setValueAtTime(0.001, now);
+//   gain.gain.linearRampToValueAtTime(100, now + 0.3);
+//   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+//   src.connect(filter);
+//   filter.connect(gain);
+//   gain.connect(ctx.destination);
+
+//   src.start(now);
+//   src.stop(now + duration);
+// }
 
 // звук закрытия меню
 
