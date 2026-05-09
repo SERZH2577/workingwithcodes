@@ -410,7 +410,7 @@ export function playClick2() {
   src.stop(now + 0.5);
 }
 
-// звук открытия меню
+// звук меню
 
 export function playMenu() {
   const ctx = getAudioCtx();
