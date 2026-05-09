@@ -611,6 +611,18 @@ const allCheckboxes = document.querySelectorAll(
   '#typeMenu input[type="checkbox"], #panelTypeMenu input[type="checkbox"]',
 );
 
+// function updateCheckboxStyles() {
+//   allCheckboxes.forEach((cb) => {
+//     const label = cb.closest(".type-item");
+
+//     if (cb.checked) {
+//       label.classList.add("active");
+//     } else {
+//       label.classList.remove("active");
+//     }
+//   });
+// }
+
 function setType(value) {
   selectedType = value;
 
@@ -631,6 +643,8 @@ allCheckboxes.forEach((checkbox) => {
     } else {
       setType(null);
     }
+
+    checkbox.blur();
   });
 });
 
