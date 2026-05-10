@@ -386,6 +386,7 @@ nameInputRef.addEventListener("input", saveToStorageDebounced);
 scannerBtn.addEventListener("click", startScanner);
 
 async function startScanner() {
+  sound.playScannerSound();
   try {
     if (screen.orientation && screen.orientation.lock) {
       await screen.orientation.lock("portrait");

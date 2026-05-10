@@ -454,83 +454,31 @@ export function playMenu() {
   src.stop(now + duration);
 }
 
-// export function playMenu() {
-//   const ctx = getAudioCtx();
-//   const now = ctx.currentTime;
+export function playScannerSound() {
+  const ctx = getAudioCtx();
+  const now = ctx.currentTime;
 
-//   const duration = 0.9;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
 
-//   const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-//   const data = buffer.getChannelData(0);
+  osc.type = "sine";
 
-//   for (let i = 0; i < data.length; i++) {
-//     const t = i / data.length;
-//     const noise = Math.random() * 2 - 1;
-//     const envelope = Math.pow(t, 2.2);
-//     data[i] = noise * envelope * 0.25;
-//   }
+  osc.frequency.setValueAtTime(900, now);
 
-//   const src = ctx.createBufferSource();
-//   src.buffer = buffer;
+  osc.frequency.exponentialRampToValueAtTime(1600, now + 0.08);
 
-//   const filter = ctx.createBiquadFilter();
-//   filter.type = "lowpass";
-//   filter.frequency.setValueAtTime(70, now);
-//   filter.frequency.exponentialRampToValueAtTime(700, now + duration);
-//   filter.Q.value = 0.7;
+  gain.gain.setValueAtTime(0.3, now);
 
-//   const gain = ctx.createGain();
-//   gain.gain.setValueAtTime(0.001, now);
-//   gain.gain.linearRampToValueAtTime(100, now + 0.3);
-//   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+  gain.gain.setValueAtTime(0.3, now + 0.08);
 
-//   src.connect(filter);
-//   filter.connect(gain);
-//   gain.connect(ctx.destination);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
-//   src.start(now);
-//   src.stop(now + duration);
-// }
+  osc.connect(gain);
+  gain.connect(ctx.destination);
 
-// звук закрытия меню
-
-// export function playMenuClose() {
-//   const ctx = new (window.AudioContext || window.webkitAudioContext)();
-//   const now = ctx.currentTime;
-
-//   const duration = 0.9;
-
-//   const buffer = ctx.createBuffer(1, ctx.sampleRate * duration, ctx.sampleRate);
-//   const data = buffer.getChannelData(0);
-
-//   for (let i = 0; i < data.length; i++) {
-//     const t = i / data.length;
-//     const noise = Math.random() * 2 - 1;
-//     const envelope = Math.pow(1 - t, 2.5);
-//     data[i] = noise * envelope * 0.25;
-//   }
-
-//   const src = ctx.createBufferSource();
-//   src.buffer = buffer;
-
-//   const filter = ctx.createBiquadFilter();
-//   filter.type = "lowpass";
-//   filter.frequency.setValueAtTime(600, now);
-//   filter.frequency.exponentialRampToValueAtTime(120, now + duration);
-//   filter.Q.value = 0.7;
-
-//   const gain = ctx.createGain();
-//   gain.gain.setValueAtTime(0.001, now);
-//   gain.gain.linearRampToValueAtTime(3, now + 0.2);
-//   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
-
-//   src.connect(filter);
-//   filter.connect(gain);
-//   gain.connect(ctx.destination);
-
-//   src.start(now);
-//   src.stop(now + duration);
-// }
+  osc.start(now);
+  osc.stop(now + 0.15);
+}
 
 export const sound = {
   playCopyTick,
@@ -544,4 +492,5 @@ export const sound = {
   playLowThudTick,
   playPlasticClick,
   playMenu,
+  playScannerSound,
 };
