@@ -92,9 +92,9 @@ export function playSweepSound() {
   for (let i = 0; i < data.length; i++) {
     const white = Math.random() * 2 - 1;
 
-    last = last * 0.96 + white * 0.04;
+    last = last * 0.96 + white * 0.015;
 
-    data[i] = last * 0.7;
+    data[i] = last * 1;
   }
 
   const noise = ctx.createBufferSource();
@@ -103,14 +103,14 @@ export function playSweepSound() {
   const filter = ctx.createBiquadFilter();
 
   filter.type = "bandpass";
-  filter.frequency.value = 700;
+  filter.frequency.value = 1200;
   filter.Q.value = 0.7;
 
   const gain = ctx.createGain();
 
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.linearRampToValueAtTime(1, now + 0.1);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+  gain.gain.linearRampToValueAtTime(2, now + 0.15);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
 
   noise.connect(filter);
   filter.connect(gain);
@@ -454,6 +454,8 @@ export function playMenu() {
   src.stop(now + duration);
 }
 
+// start SCANNER
+
 export function playScannerSound() {
   const ctx = getAudioCtx();
   const now = ctx.currentTime;
@@ -465,11 +467,11 @@ export function playScannerSound() {
 
   osc.frequency.setValueAtTime(900, now);
 
-  osc.frequency.exponentialRampToValueAtTime(1600, now + 0.08);
+  osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
 
-  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.setValueAtTime(0.2, now);
 
-  gain.gain.setValueAtTime(0.3, now + 0.08);
+  gain.gain.setValueAtTime(0.3, now + 0.07);
 
   gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
 
